@@ -1,0 +1,17 @@
+
+
+.box.vibration {
+    width: 150px;
+    height: 150px;
+    background: #febf00;
+    animation: vibration 0.1s infinite;
+}
+
+@keyframes vibration {
+    from {
+        transform: translate(1px, 1px);
+    }
+    to {
+        transform: translate(-1px, -1px);
+    }
+}

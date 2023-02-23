@@ -7,13 +7,13 @@ import styles from './TopNavbar.module.css'
 const TopNavbar= () => {
     return (
         <>
-        <Navbar style={{backgroundColor: 'rgba(19,22,38)' ,color:'red'}} >
+        <Navbar style={{backgroundColor: 'rgba(222,222,222)' ,color:'red'}} >
             <Container>
-            <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+            <Navbar.Brand href="/">Navbar</Navbar.Brand>
             <Nav className="me-auto">
-                <Nav.Link href="#home">Quiz</Nav.Link>  
-                <Nav.Link href="#features">Ranking</Nav.Link>
-                <Nav.Link href="#pricing">Login</Nav.Link>
+                <Nav.Link href="/Quiz">Quiz</Nav.Link>  
+                <Nav.Link href="/Ranking">Ranking</Nav.Link>
+                <Nav.Link href="/Login">Login</Nav.Link>
             </Nav>
             </Container>
         </Navbar>

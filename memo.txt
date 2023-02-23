@@ -1,0 +1,71 @@
+#그냥 만들면서 메모..
+
+#react-router-dom
+v5 -> v6 변경점
+
+
+[변경점.1] v5 Switch --> Routes로 바뀜
+<Switch>
+    <Route path="/" exact>
+        <components/>
+    </Route>
+</Switch>
+
+v6 Routes
+<Routes>
+    <Route path="/" exact>
+        <components/>
+    </Route>
+</Routes>
+
+[변경점.2] v5 useHistory() --> useNavigate();
+...
+history.push()
+history.goBack(); //뒤로가기
+history.go(-2) //2 index 뒤로가기
+
+v6 useNavigate();
+useNavigate는 객체가 아닌 함수다.
+...
+navigate("/")
+navigate(-1)
+navigate(-2)
+
+[변경점.3] useRouteMatch (삭제됨)--> 상대경로 가능
+...
+ex) 
+v5
+const match = useRouteMatch();
+...
+<Link to={match.url}/>
+<Route path={`${mathch.path}`/>about}/>
+
+v6
+<Link to=""/>
+<Route path="about"/> // 현재 route에 매치된 경로 뒤에 about을 추가해서 이동되는 링크로 만들어줌(상대경로)
+<Link to="/about"/> // about페이지로 이동
+
+[변경점.4] 자식컴포넌트 대신 --> element,
+
+v5 Route 안에 children 컴포넌트를 넣는형태
+※ Route는 Routes의 직속자식 컴포넌트여야함.
+
+<Route path="/" exact>
+    <components/>
+</Route>
+
+v6 element 안에 써줌
+<Route path="/" exact element={<Home/>}>
+
+
+[변경점.5] exact를 쓰지않아도 된다. --> /* (와일드카드로 접근가능)
+
+v5
+<Route path="/" exact element={<Home/>}/>
+<Route path="/users/:username" ...>
+    <Components/>
+</Route>
+
+v6
+<Route path="/" exact element={<Home/>}/>
+<Route path="/users/:username/*">

@@ -6,6 +6,7 @@ import { authService } from './firebaseConfig';
 
 function App() {
 	console.log(authService.currentUser)
+
 	
 	return (
 		<div className="App">

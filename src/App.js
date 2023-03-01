@@ -13,7 +13,6 @@ function App() {
 
 	useEffect(()=>{
 		const auth = authService;
-
 		onAuthStateChanged(auth, (user)=>{
 			if(user){
 				setUser(user)
@@ -21,18 +20,16 @@ function App() {
 				setUser(null)
 			}
 		})
-		console.log(auth)
-		console.log(authService.currentUser)
-		setInterval(()=>{
-			console.log(authService.currentUser)
-		},2000)
+		// console.log(auth)
+		// console.log(authService.currentUser)
+		// setInterval(()=>{
+		// 	console.log(authService.currentUser)
+		// },2000)
 	},[])
-
-
 	return (
 		<div className="App">
 			{/* <div className="box vibration"></div> */}
-			<AppRouter isLoggedIn={Boolean(user)} user={user}/>
+			<AppRouter isLoggedIn={user ? true : false} user={user}/>
 			<footer className="footer">&copy; PictureQuiz {new Date().getFullYear()}</footer> 
 				{/* <Home/> */}
 		</div>

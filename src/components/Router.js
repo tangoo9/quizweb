@@ -8,6 +8,8 @@ import Profile from '../pages/Profile'
 import Quiz from '../pages/Quiz'
 import Ranking from '../pages/Ranking'
 import TopNavbar from './TopNavbar'
+import Invoices from '../pages/invoice'
+import Invoice from '../pages/invoices'
 
 const AppRouter = ({isLoggedIn ,user}) => {
 	console.log('라우터 ', user)
@@ -18,19 +20,24 @@ const AppRouter = ({isLoggedIn ,user}) => {
 				{/* {isLoggedIn && <TopNavbar isLoggedIn={isLoggedIn} user={user}/>} */}
 				<TopNavbar isLoggedIn={isLoggedIn} user={user}/>
 				<Routes>
-					<Route path="/" element={<Home isLoggedIn={isLoggedIn}/>}/>
-					<Route path="/Quiz" element={<Quiz/>}/>
-					<Route path="/Ranking" element={<Ranking/>}/>
-					{isLoggedIn 
-						? 
-						<>
-							<Route path="/Profile" user={user} element={<Profile/>}/>
-						</>
-						:
-						<>
-							<Route path="/Login" element={<LogIn/>} />
-						</>
-					}
+					<Route path="/" element={<Home isLoggedIn={isLoggedIn}/>}>
+						<Route path="/Quiz" element={<Quiz/>}/>
+						<Route path="/Ranking" element={<Ranking/>}/>
+						{isLoggedIn 
+							? 
+							<>
+								<Route path="/Profile" user={user} element={<Profile/>}/>
+							</>
+							:
+							<>
+								<Route path="/Login" element={<LogIn/>} />
+							</>
+						}
+					</Route>
+					<Route path="/Invoices" element={<Invoices/>}>
+						<Route path=":invoiceId" element={<Invoice />} />
+					</Route>
+
 					<Route path="/*" element={<Page404/>}/>
 				</Routes>
 			</BrowserRouter>

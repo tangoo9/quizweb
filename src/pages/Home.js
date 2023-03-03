@@ -59,6 +59,7 @@ const Home = ({isLoggedIn}) => {
 			:
 			<LoginForm/>
 			}
+			<DocRead/>
 			<div>
 					{docData.map(v => (
 						<div key={v.id}  >
@@ -66,27 +67,26 @@ const Home = ({isLoggedIn}) => {
 							{v.AttachmentUrl && <img src={v.AttachmentUrl} alt="" />}
 						</div>
 					))}
-			<DocRead/>
-			<nav
-				style={{
-				borderRight: "solid 1px",
-				padding: "1rem",
-				}}
-			>
-				{invoices.map((invoice) => (
-				<Link
+				<nav
 					style={{
-					display: 'block',
-					margin: '1rem 0',
-					backgroundColor: 'tomato',
+					borderRight: "solid 1px",
+					padding: "1rem",
 					}}
-					to={`/invoices/${invoice.number}`}
-					key={invoice.number}
 				>
-					{invoice.name}
-				</Link>
-				))}
-			</nav>
+					{invoices.map((invoice) => (
+					<Link
+						style={{
+						display: 'block',
+						margin: '1rem 0',
+						backgroundColor: 'tomato',
+						}}
+						to={`/invoices/${invoice.number}`}
+						key={invoice.number}
+					>
+						{invoice.name}
+					</Link>
+					))}
+				</nav>
 			</div>
 		</>
 	)

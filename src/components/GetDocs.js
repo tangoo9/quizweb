@@ -9,7 +9,7 @@ const DocRead = ({user, isOwner}) => {
 
 	useEffect(()=>{
 		const q = query(
-			collection(dbService, "nweets"),
+			collection(dbService, "picturedb"),
 			orderBy("createdAt", "asc")
 			);
 			onSnapshot(q, (snapshot) => {
@@ -22,11 +22,11 @@ const DocRead = ({user, isOwner}) => {
 	},[])
 
     return (
-        <div >
+        <div >	
             {docData.map(docData => (
                 <div key={docData.id}  >
                     {docData.text}
-                    {docData.AttachmentUrl && <img src={docData.AttachmentUrl} alt="" />}
+                    {docData.picture && <img src={docData.picture} alt="" />}
                 </div>
             ))} 
         </div>

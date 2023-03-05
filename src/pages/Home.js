@@ -6,6 +6,7 @@ import LoginForm from '../components/LoginForm';
 import DocRead from '../components/GetDocs';
 import { authService, dbService } from '../firebaseConfig'
 import { getInvoices } from "./data.ts";
+import Deck from './Card.tsx';
 
 const Home = ({isLoggedIn}) => {
 	const [docData, setDocData] = useState([]);
@@ -23,24 +24,24 @@ const Home = ({isLoggedIn}) => {
 			return array[random]
 		}
 		try{
-			const q = query(collection(dbService, "nweets"));
+			const q = query(collection(dbService, "picturedb"));
 			const quizArray = [];
 			
 			const quizData = onSnapshot(q, (querySnapshot) => {
 				querySnapshot.forEach((doc) => {
-					quizArray.push(doc.data().text);
+					quizArray.push(doc.data());
 				});
 				console.log("배열 테스트 : ", quizArray.join(", "));
 				console.log("랜덤값 테스트: ", randomValue(quizArray));
+				const selected = randomValue(quizArray)
+				setDocData(selected)
 			});
-			return randomValue(quizArray)
 		}catch(error){
 			console.log("에러", error)
 		}
 	}
 
-
-
+	console.log("도큐먼트", docData)
 	useEffect(()=>{
 		getMyDocs();
 	},[])
@@ -59,15 +60,17 @@ const Home = ({isLoggedIn}) => {
 			:
 			<LoginForm/>
 			}
-			<DocRead/>
+			{/* <DocRead/> */}
+			{/* <Deck cards={docData} /> */}
 			<div>
-					{docData.map(v => (
-						<div key={v.id}  >
-							{v.text}
-							{v.AttachmentUrl && <img src={v.AttachmentUrl} alt="" />}
-						</div>
-					))}
-				<nav
+				{docData?.text &&(
+					<div key={docData.id}>
+					{docData.text}
+					{docData.picture && <img src={docData.picture} alt="" />}
+					</div>
+				)
+				}
+				{/* <nav
 					style={{
 					borderRight: "solid 1px",
 					padding: "1rem",
@@ -86,7 +89,7 @@ const Home = ({isLoggedIn}) => {
 						{invoice.name}
 					</Link>
 					))}
-				</nav>
+				</nav> */}
 			</div>
 		</>
 	)

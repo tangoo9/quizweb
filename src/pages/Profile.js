@@ -5,6 +5,16 @@ import DocRead from '../components/GetDocs';
 import { v4 } from 'uuid';
 import { dbService, storageService } from '../firebaseConfig';
 
+const now = new Date(); 
+const year = now.getFullYear();
+const month = (now.getMonth() + 1).toString().padStart(2, '0'); 
+const day = now.getDate().toString().padStart(2, '0'); 
+const hour = now.getHours().toString().padStart(2, '0'); 
+const minute = now.getMinutes().toString().padStart(2, '0');
+const second = now.getSeconds().toString().padStart(2, '0'); 
+const millisecond = now.getMilliseconds().toString().padStart(3, '0'); 
+
+const timeNow = `${year}-${month}-${day} ${hour}:${minute}:${second}.${millisecond}`;
 
 const Profile = ({user}) => {
     const [docs, setDocs ] = useState('');
@@ -27,14 +37,14 @@ const Profile = ({user}) => {
 			//storage의 파일 url로 다운로드
 			AttachmentUrl = await getDownloadURL(response.ref)
 		}
-		const nweetPost = {
+		const picturePost = {
 			text:docs,
-			createdAt: Date.now(),
+			createdAt: timeNow,
 			creatorId: user.uid,
-			AttachmentUrl,
+			picture : AttachmentUrl,
 		}
 		try{
-			const docRef = await addDoc(collection(dbService, "nweets"),  nweetPost);
+			const docRef = await addDoc(collection(dbService, "picturedb"),  picturePost);
 			console.log("Document written with ID: ", docRef.id);
 		}catch(error){
 			console.log(error)
@@ -43,7 +53,7 @@ const Profile = ({user}) => {
 		setDocs("")
 		setAttachment("")
 	}
-
+	
 	const onChange = (e) =>{
 		const {target : {value} } = e;
 		setDocs(value); 

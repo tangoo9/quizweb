@@ -5,18 +5,18 @@ import { Link } from 'react-router-dom';
 
 
 const TopNavbar= ({isLoggedIn, user}) => {
-
+    // <Link to="/Quiz">quiz</Link>
     return (
         <>
         <Navbar style={{backgroundColor: 'rgba(222,222,222)' , color:'red'}} >
             <Container>
-                <Navbar.Brand><Link to="/">Home</Link></Navbar.Brand>
+                <Navbar.Brand as={Link} to="/">Home</Navbar.Brand>
                 <Nav className="me-auto">
-                    <Nav.Link><Link to="/Quiz">quiz</Link></Nav.Link>
-                    <Nav.Link><Link to="/Ranking">Ranking</Link></Nav.Link>
+                    <Nav.Link as={Link} to="/Quiz">Quiz</Nav.Link>
+                    <Nav.Link as={Link} to="/Ranking">Ranking</Nav.Link>
                         {isLoggedIn &&(
                             <>
-                                <Nav.Link><Link to="/Profile">Profile</Link></Nav.Link>
+                                <Nav.Link as={Link} to="/Profile">Profile</Nav.Link>
                                 {user.displayName}님 안녕하세요.
                             </>
                         )}

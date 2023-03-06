@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, serverTimestamp  } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import DocRead from '../components/GetDocs';
 import { v4 } from 'uuid';
@@ -16,11 +16,11 @@ const millisecond = now.getMilliseconds().toString().padStart(3, '0');
 
 const timeNow = `${year}-${month}-${day} ${hour}:${minute}:${second}.${millisecond}`;
 
-const Profile = ({user}) => {
+const AddQuiz = ({user}) => {
     const [docs, setDocs ] = useState('');
 	const [attachment, setAttachment] = useState('');
     console.log(user)
-
+	console.log("시간", serverTimestamp())
     const onSubmit = async (e) =>{
 		if (docs === "") {
 			return;
@@ -38,8 +38,8 @@ const Profile = ({user}) => {
 			AttachmentUrl = await getDownloadURL(response.ref)
 		}
 		const picturePost = {
-			text:docs,
-			createdAt: timeNow,
+			answer:docs,
+			createdAt: serverTimestamp(),
 			creatorId: user.uid,
 			picture : AttachmentUrl,
 		}
@@ -116,4 +116,4 @@ const Profile = ({user}) => {
     )
 }
 
-export default Profile
+export default AddQuiz

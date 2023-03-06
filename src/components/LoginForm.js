@@ -41,7 +41,7 @@ function LoginForm() {
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>비밀번호를 입력하세요.</Form.Label>
-                    <Form.Control type="password" placeholder="Password" />
+                    <Form.Control type="password" placeholder="Password" autoComplete='true'/>
                     <Form.Text className="text-muted">
                         영문,특수문자 포함
                     </Form.Text>

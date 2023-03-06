@@ -1,15 +1,21 @@
-import { collection, getDocs, onSnapshot, query, setDoc } from 'firebase/firestore'
-import React, { useEffect, useState } from 'react'
+import { collection, getDocs} from 'firebase/firestore'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
-import DocRead from '../components/GetDocs';
 import { authService, dbService } from '../firebaseConfig'
-import { getInvoices } from "./data.ts";
-import Deck from './Card.tsx';
+import styles from "../css/Home.module.css";
+
+const correctSound = new Audio("../sounds/correct.mp3");
+const wrongSound = new Audio("../sounds/wrong.mp3");
 
 const Home = ({isLoggedIn}) => {
-	const [docData, setDocData] = useState([]);
+	const [initQuiz, setInitQuiz] = useState([]); //퀴즈 데이터 불러오기
+	const [quiz, setQuiz] = useState("");  //퀴즈
+	const [answer, setAnswer] = useState(""); 
+	const [result, setResult] = useState("");
+	const [score, setScore] = useState(0);
+	const [play, setPlay] = useState(false);
 
 	const navigate = useNavigate()
     const onLogOut = ()=>{  
@@ -17,40 +23,75 @@ const Home = ({isLoggedIn}) => {
         navigate('/', {replace : true})
     }
 
-
-	const getMyDocs = async () =>{
-		const randomValue = (array) =>{
-			const random = Math.floor(Math.random() * array.length)
-			return array[random]
-		}
-		try{
-			const q = query(collection(dbService, "picturedb"));
-			const quizArray = [];
-			
-			const quizData = onSnapshot(q, (querySnapshot) => {
-				querySnapshot.forEach((doc) => {
-					quizArray.push(doc.data());
-				});
-				console.log("배열 테스트 : ", quizArray.join(", "));
-				console.log("랜덤값 테스트: ", randomValue(quizArray));
-				const selected = randomValue(quizArray)
-				setDocData(selected)
-			});
-		}catch(error){
-			console.log("에러", error)
-		}
+	const StartGame = () =>{
+		setPlay(true)
 	}
 
-	console.log("도큐먼트", docData)
-	useEffect(()=>{
-		getMyDocs();
-	},[])
+	const randomValue = (array) =>{
+		const random = Math.floor(Math.random() * array.length)
+		return array[random]
+	}
 
-	let invoices = getInvoices();
+	const getInitQuiz = async () =>{
+		try {
+			const initQuiz = await getDocs(collection(dbService, 'picturedb'));
+			const quizArray = initQuiz.docs.map((doc) => doc.data())
+			setInitQuiz(quizArray)
+			console.log("퀴즈 불러오기 완료")
+		}catch (error) {
+			console.log('에러', error);
+		}
+	};
 
+
+	const nextQuiz = useCallback(() => {
+		if (initQuiz.length > 0) {
+			console.log("퀴즈 준비")
+			console.log("생성된것: ", initQuiz)
+			setQuiz(randomValue(initQuiz))
+		}
+	}, [initQuiz]);
+
+	const handleAnswerChange = useCallback((e) => {
+		const {target : {value}} = e
+        setAnswer(value)
+	}, []);
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		if (quiz.answer === answer) {
+			// 정답
+			setResult(`정답입니다!`);
+			setScore(score + 1);
+			correctSound.play()
+
+			// 다음 퀴즈 필터링
+			const filtering = initQuiz.filter(data => data.answer !== quiz.answer)
+			setInitQuiz(filtering)
+			nextQuiz();
+		} else {
+			// 오답
+			setResult(`땡! 정답은 "${quiz.answer}" 입니다.`);
+			wrongSound.play();
+		}
+		setAnswer("");
+	};
+
+	useEffect(() => {
+		if (!initQuiz.length) {
+			getInitQuiz();
+		} else if (initQuiz.length === 1) {
+			setInitQuiz([]);
+			setPlay(false);
+			setScore(0)
+			setResult("게임이 종료되었습니다.");
+		} else {
+			nextQuiz();
+		}
+	}, [initQuiz, nextQuiz]);
 
 	return (
-		<>
+		<div className={styles.container}>
 			{isLoggedIn 
 			?  
 			<Button 
@@ -60,38 +101,39 @@ const Home = ({isLoggedIn}) => {
 			:
 			<LoginForm/>
 			}
-			{/* <DocRead/> */}
-			{/* <Deck cards={docData} /> */}
-			<div>
-				{docData?.text &&(
-					<div key={docData.id}>
-					{docData.text}
-					{docData.picture && <img src={docData.picture} alt="" />}
+			{play 
+				? (
+					<div className={styles.flexCenter}>
+					<div className={styles["quiz-grid"]}>
+						{quiz?.answer && (
+							<div key={quiz.id}>
+							{quiz.answer}
+							{quiz.picture && (
+								<div className={styles.pictureWrapper}>
+									<img className={styles.picture} src={quiz.picture} alt="" />
+								</div>
+							)}
+							</div>
+						)}
 					</div>
+						<form onSubmit={handleSubmit}>
+							<input 
+								className={styles.quizInput}
+								type="text" 
+								value={answer} 
+								onChange={handleAnswerChange}
+								/>
+						</form>
+						{score === 0 ?  "" : (<div>score : {score}</div>)}
+				</div>
 				)
-				}
-				{/* <nav
-					style={{
-					borderRight: "solid 1px",
-					padding: "1rem",
-					}}
-				>
-					{invoices.map((invoice) => (
-					<Link
-						style={{
-						display: 'block',
-						margin: '1rem 0',
-						backgroundColor: 'tomato',
-						}}
-						to={`/invoices/${invoice.number}`}
-						key={invoice.number}
-					>
-						{invoice.name}
-					</Link>
-					))}
-				</nav> */}
-			</div>
-		</>
+				:
+				<>
+					<button className={styles.startButton} type='button' onClick={StartGame}>시작하기</button>
+				</>
+			}
+			<div>{result}</div>
+		</div>
 	)
 }
 

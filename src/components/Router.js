@@ -4,7 +4,7 @@ import { authService } from '../firebaseConfig'
 import Page404 from '../pages/404'
 import Home from '../pages/Home'
 import LogIn from '../pages/Login'
-import Profile from '../pages/Profile'
+import AddQuiz from '../pages/AddQuiz'
 import Quiz from '../pages/Quiz'
 import Ranking from '../pages/Ranking'
 import TopNavbar from './TopNavbar'
@@ -12,9 +12,6 @@ import Invoices from '../pages/invoice'
 import Invoice from '../pages/invoices'
 
 const AppRouter = ({isLoggedIn ,user}) => {
-	console.log('라우터 ', user)
-
-
 
 	return (
 		<>
@@ -25,7 +22,7 @@ const AppRouter = ({isLoggedIn ,user}) => {
 					<Route path="/" element={<Home isLoggedIn={isLoggedIn}/>}/>
 					<Route path="/Quiz" element={<Quiz/>}/>
 					<Route path="/Ranking" element={<Ranking/>}/>
-					<Route path="/Profile" element={<Profile user={user}/>}/>
+					<Route path="/AddQuiz" element={<AddQuiz user={user}/>}/>
 					<Route path="/Login" element={<LogIn/>} />
 					<Route path="/Invoices" element={<Invoices/>}>
 						<Route path=":invoiceId" element={<Invoice />} />

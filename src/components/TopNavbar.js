@@ -16,7 +16,7 @@ const TopNavbar= ({isLoggedIn, user}) => {
                     <Nav.Link as={Link} to="/Ranking">Ranking</Nav.Link>
                         {isLoggedIn &&(
                             <>
-                                <Nav.Link as={Link} to="/Profile">Profile</Nav.Link>
+                                <Nav.Link as={Link} to="/AddQuiz">AddQuiz</Nav.Link>
                                 {user.displayName}님 안녕하세요.
                             </>
                         )}

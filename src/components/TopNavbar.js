@@ -1,11 +1,18 @@
+import { Button } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { authService } from '../firebaseConfig';
 
 
 const TopNavbar= ({isLoggedIn, user}) => {
     // <Link to="/Quiz">quiz</Link>
+    const navigate = useNavigate()
+    const onLogOut = ()=>{  
+        authService.signOut();
+        navigate('/', {replace : true})
+    }
     return (
         <>
         <Navbar style={{backgroundColor: 'rgba(222,222,222)' , color:'red'}} >
@@ -18,6 +25,7 @@ const TopNavbar= ({isLoggedIn, user}) => {
                             <>
                                 <Nav.Link as={Link} to="/AddQuiz">AddQuiz</Nav.Link>
                                 {user.displayName}님 안녕하세요.
+                                <Button type="button"onClick={onLogOut}>Log Out</Button>
                             </>
                         )}
                 </Nav>

@@ -5,9 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
 import { authService, dbService } from '../firebaseConfig'
 import styles from "../css/Home.module.css";
+import Timer from '../components/Timer';
 
-const correctSound = new Audio("../sounds/correct.mp3");
-const wrongSound = new Audio("../sounds/wrong.mp3");
+const correctSound = new Audio(`${process.env.PUBLIC_URL}/sounds/correct.mp3`);
+const wrongSound = new Audio(`${process.env.PUBLIC_URL}/sounds/wrong.mp3`);
 
 const Home = ({isLoggedIn}) => {
 	const [initQuiz, setInitQuiz] = useState([]); //퀴즈 데이터 불러오기
@@ -15,16 +16,12 @@ const Home = ({isLoggedIn}) => {
 	const [answer, setAnswer] = useState(""); 
 	const [result, setResult] = useState("");
 	const [score, setScore] = useState(0);
-	const [play, setPlay] = useState(false);
+	const [isPlaying, setIsPlaying] = useState(false);
 
-	const navigate = useNavigate()
-    const onLogOut = ()=>{  
-        authService.signOut();
-        navigate('/', {replace : true})
-    }
+
 
 	const StartGame = () =>{
-		setPlay(true)
+		setIsPlaying(true)
 	}
 
 	const randomValue = (array) =>{
@@ -42,7 +39,6 @@ const Home = ({isLoggedIn}) => {
 			console.log('에러', error);
 		}
 	};
-
 
 	const nextQuiz = useCallback(() => {
 		if (initQuiz.length > 0) {
@@ -64,7 +60,6 @@ const Home = ({isLoggedIn}) => {
 			setResult(`정답입니다!`);
 			setScore(score + 1);
 			correctSound.play()
-
 			// 다음 퀴즈 필터링
 			const filtering = initQuiz.filter(data => data.answer !== quiz.answer)
 			setInitQuiz(filtering)
@@ -82,28 +77,20 @@ const Home = ({isLoggedIn}) => {
 			getInitQuiz();
 		} else if (initQuiz.length === 1) {
 			setInitQuiz([]);
-			setPlay(false);
-			setScore(0)
+			setIsPlaying(false);
 			setResult("게임이 종료되었습니다.");
 		} else {
 			nextQuiz();
 		}
 	}, [initQuiz, nextQuiz]);
 
+
 	return (
 		<div className={styles.container}>
-			{isLoggedIn 
-			?  
-			<Button 
-			type="button"
-			onClick={onLogOut}
-			>Log Out</Button>
-			:
-			<LoginForm/>
-			}
-			{play 
-				? (
-					<div className={styles.flexCenter}>
+			{isLoggedIn	? null : <LoginForm/>}
+			{isPlaying ? 
+				(
+				<div className={styles.flexCenter}>
 					<div className={styles["quiz-grid"]}>
 						{quiz?.answer && (
 							<div key={quiz.id}>
@@ -116,15 +103,15 @@ const Home = ({isLoggedIn}) => {
 							</div>
 						)}
 					</div>
-						<form onSubmit={handleSubmit}>
-							<input 
-								className={styles.quizInput}
-								type="text" 
-								value={answer} 
-								onChange={handleAnswerChange}
-								/>
-						</form>
-						{score === 0 ?  "" : (<div>score : {score}</div>)}
+					<form onSubmit={handleSubmit}>
+						<input 
+							className={styles.quizInput}
+							type="text" 
+							value={answer} 
+							onChange={handleAnswerChange}
+							/>
+					</form>
+					{score === 0 ?  "" : (<div>score : {score}</div>)}
 				</div>
 				)
 				:
@@ -133,6 +120,8 @@ const Home = ({isLoggedIn}) => {
 				</>
 			}
 			<div>{result}</div>
+			<p> 맞춘문제 총 : {score} 개</p>
+			<Timer/>
 		</div>
 	)
 }

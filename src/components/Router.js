@@ -15,7 +15,7 @@ const AppRouter = ({isLoggedIn ,user}) => {
 
 	return (
 		<>
-			<BrowserRouter>
+			<BrowserRouter basename={process.env.PUBLIC_URL}>
 				{/* {isLoggedIn && <TopNavbar isLoggedIn={isLoggedIn} user={user}/>} */}
 				<TopNavbar isLoggedIn={isLoggedIn} user={user}/>
 				<Routes>

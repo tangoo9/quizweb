@@ -1,0 +1,4 @@
+# Redirect all requests to the root
+RewriteEngine on
+RewriteCond %{REQUEST_URI} !^/$
+RewriteRule ^(.*)$ / [L,R=301]

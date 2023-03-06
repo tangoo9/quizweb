@@ -10,28 +10,28 @@ import Ranking from '../pages/Ranking'
 import TopNavbar from './TopNavbar'
 import Invoices from '../pages/invoice'
 import Invoice from '../pages/invoices'
+import AppLayout from '../components/AppLayout'
 
-const AppRouter = ({isLoggedIn ,user}) => {
-
-	return (
-		<>
-			<BrowserRouter basename={process.env.PUBLIC_URL}>
-				{/* {isLoggedIn && <TopNavbar isLoggedIn={isLoggedIn} user={user}/>} */}
-				<TopNavbar isLoggedIn={isLoggedIn} user={user}/>
+const AppRouter = ({isLoggedIn ,user}) => (
+	<>
+		<BrowserRouter basename={process.env.PUBLIC_URL}>
+			{/* {isLoggedIn && <TopNavbar isLoggedIn={isLoggedIn} user={user}/>} */}
+			<TopNavbar isLoggedIn={isLoggedIn} user={user} />
+			<AppLayout>
 				<Routes>
-					<Route path="/" element={<Home isLoggedIn={isLoggedIn}/>}/>
-					<Route path="/Quiz" element={<Quiz/>}/>
-					<Route path="/Ranking" element={<Ranking/>}/>
-					<Route path="/AddQuiz" element={<AddQuiz user={user}/>}/>
-					<Route path="/Login" element={<LogIn/>} />
-					<Route path="/Invoices" element={<Invoices/>}>
+					<Route path="/" element={<Home isLoggedIn={isLoggedIn} />} />
+					<Route path="/Quiz" element={<Quiz />} />
+					<Route path="/Ranking" element={<Ranking />} />
+					<Route path="/AddQuiz" element={<AddQuiz user={user} />} />
+					<Route path="/Login" element={<LogIn />} />
+					<Route path="/Invoices" element={<Invoices />}>
 						<Route path=":invoiceId" element={<Invoice />} />
 					</Route>
-					<Route path="/*" element={<Page404/>}/>
+					<Route path="/*" element={<Page404 />} />
 				</Routes>
-			</BrowserRouter>
-		</>
-	)
-}
+			</AppLayout>
+		</BrowserRouter>
+	</>
+)
 
 export default AppRouter

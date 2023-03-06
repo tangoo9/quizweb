@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 
 
+
 function App() {
 
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,7 +32,7 @@ function App() {
 			{/* <div className="box vibration"></div> */}
 			<AppRouter isLoggedIn={user ? true : false} user={user}/>
 			<footer className="footer">&copy; PictureQuiz {new Date().getFullYear()}</footer> 
-				{/* <Home/> */}
+			{/* <Home/> */}
 		</div>
 	);
 }

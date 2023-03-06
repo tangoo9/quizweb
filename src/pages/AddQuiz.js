@@ -4,17 +4,8 @@ import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import DocRead from '../components/GetDocs';
 import { v4 } from 'uuid';
 import { dbService, storageService } from '../firebaseConfig';
+import styles from "../css/AddQuiz.module.css";
 
-const now = new Date(); 
-const year = now.getFullYear();
-const month = (now.getMonth() + 1).toString().padStart(2, '0'); 
-const day = now.getDate().toString().padStart(2, '0'); 
-const hour = now.getHours().toString().padStart(2, '0'); 
-const minute = now.getMinutes().toString().padStart(2, '0');
-const second = now.getSeconds().toString().padStart(2, '0'); 
-const millisecond = now.getMilliseconds().toString().padStart(3, '0'); 
-
-const timeNow = `${year}-${month}-${day} ${hour}:${minute}:${second}.${millisecond}`;
 
 const AddQuiz = ({user}) => {
     const [docs, setDocs ] = useState('');
@@ -75,7 +66,7 @@ const AddQuiz = ({user}) => {
 	}
 
     return (
-        <div >
+        <div className={styles.container}>
             <form onSubmit={onSubmit} >
 			<div >
 				<input 
@@ -86,32 +77,32 @@ const AddQuiz = ({user}) => {
 					maxLength={120}/>
 				<input type="submit" value="추가"/>
 			</div>
-				<label htmlFor="attach-file">
-					<span>사진 or 그림 추가하기</span>
-					<span>+</span>
-				</label>
-				<input
-					id="attach-file"
-					type="file"
-					accept="image/*"
-					onChange={onFileChange}
-					style={{
-					display :'none'
-					}}
-				/>
-        {attachment &&   (
-            <div >
-                <img src={attachment} alt="none"             
-					style={{backgroundImage: attachment}}/>
-                <button onClick={onRemoveImage}>
-					<span>
-						선택 취소
-					</span>
-					<span>x</span>
-				</button>
-            </div>
-        )}
-    </form>
+			<label htmlFor="attach-file">
+				<span>사진 or 그림 추가하기</span>
+				<span>+</span>
+			</label>
+			<input
+				id="attach-file"
+				type="file"
+				accept="image/*"
+				onChange={onFileChange}
+				style={{
+				display :'none'
+				}}
+			/>
+			{attachment &&   (
+				<div >
+					<img src={attachment} alt="none"             
+						style={{backgroundImage: attachment}}/>
+					<button onClick={onRemoveImage}>
+						<span>
+							선택 취소
+						</span>
+						<span>x</span>
+					</button>
+				</div>
+			)}
+    		</form>
         </div>
     )
 }

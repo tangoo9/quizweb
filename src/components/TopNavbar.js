@@ -1,9 +1,7 @@
-import { Button } from 'react-bootstrap';
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
+import { Button, Container, Form, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { authService } from '../firebaseConfig';
+
 
 
 const TopNavbar= ({isLoggedIn, user}) => {
@@ -22,13 +20,15 @@ const TopNavbar= ({isLoggedIn, user}) => {
                     <Nav.Link as={Link} to="/Quiz">Quiz</Nav.Link>
                     <Nav.Link as={Link} to="/Ranking">Ranking</Nav.Link>
                         {isLoggedIn &&(
-                            <>
-                                <Nav.Link as={Link} to="/AddQuiz">AddQuiz</Nav.Link>
-                                {user.displayName}님 안녕하세요.
-                                <Button type="button"onClick={onLogOut}>Log Out</Button>
-                            </>
+                            <Nav.Link as={Link} to="/AddQuiz">AddQuiz</Nav.Link>
                         )}
                 </Nav>
+                        {isLoggedIn &&(
+                            <>
+                                <Nav.Item className="ms-auto">{user.displayName}님 안녕하세요.</Nav.Item>
+                                <Button className="ml-3" type="button"onClick={onLogOut}>Log Out</Button>
+                            </>
+                        )}
             </Container>
         </Navbar>
         </>

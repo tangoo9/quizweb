@@ -69,3 +69,11 @@ v5
 v6
 <Route path="/" exact element={<Home/>}/>
 <Route path="/users/:username/*">
+
+
+##react-router-dom <Link/>와 bootstrap<Nav.Link/> 혼용하기
+import { Link} from 'react-router-dom';
+import { Nav } from 'react-bootstrap';
+<Nav.Link as={Link} to="/Quiz">Quiz</Nav.Link>
+
+위처럼 as={Link}로 사용해주면 react-router-dom의 link를 사용하면서도 부스스트랩 ui적용가능

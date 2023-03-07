@@ -103,6 +103,9 @@ const AddQuiz = ({user}) => {
 				</div>
 			)}
     		</form>
+			<p>닉네임 : {user?.displayName}</p>
+			<p>이메일 : {user?.email}</p>
+			<p>연락처 : {user?.phoneNumber}</p>
         </div>
     )
 }

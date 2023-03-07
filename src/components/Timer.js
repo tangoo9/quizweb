@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 
-const Timer = () => {
-    const [isPlaying, setIsPlaying] = useState(false);
+const Timer = ({isPlaying, onTimeStop}) => {
     const [timer, setTimer] = useState(0);
+    const [endTime, setEndTime] = useState(0);
     
     useEffect(() => {
         let timerId;
@@ -13,8 +13,13 @@ const Timer = () => {
         }
         return () => {
             clearTimeout(timerId);
+            if (!isPlaying) {
+                setEndTime(timer);
+                onTimeStop(timer);
+                setTimer(0)
+            }
         };
-    }, [isPlaying, timer]);
+    }, [isPlaying, timer, onTimeStop, endTime]);
 
     const formatTime = (time) => {
         const minutes = Math.floor(time / 60000).toString().padStart(2, '0');
@@ -23,16 +28,16 @@ const Timer = () => {
         return `${minutes}:${seconds}:${milliseconds}`;
     }
 
-    const stopTimer = () =>{
-        setIsPlaying(false);
-        setTimer(0);
-    }
+    // const stopTimer = () =>{
+    //     setIsPlaying(false);
+    //     setTimer(0);
+    // }
 
     return (
         <>
         <h1>{formatTime(timer)}</h1>
-        <button type='button' onClick={() =>setIsPlaying(true)}>타이머시작</button>
-        <button type='button' onClick={stopTimer}>타이머 종료</button>
+        {/* <button type='button' onClick={() =>setIsPlaying(true)}>타이머시작</button> */}
+        {/* <button type='button' onClick={stopTimer}>타이머 종료</button> */}
         </>
     )
 }

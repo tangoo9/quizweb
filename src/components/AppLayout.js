@@ -18,11 +18,11 @@ const MainContent = styled(Col)`
 function AppLayout({children}) {
     return (
         <Container>
-        <Row>
-            <Col ></Col>
-            <MainContent xs={5} lg={10}>{children}</MainContent>
-            <Col ></Col>
-        </Row>
+            <Row>
+                <Col ></Col>
+                <MainContent xs={8} lg={10}>{children}</MainContent>
+                <Col ></Col>
+            </Row>
         </Container>
     );
 }

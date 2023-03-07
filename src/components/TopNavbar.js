@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Button, Container, Form, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { authService } from '../firebaseConfig';
@@ -11,6 +12,7 @@ const TopNavbar= ({isLoggedIn, user}) => {
         authService.signOut();
         navigate('/', {replace : true})
     }
+
     return (
         <>
         <Navbar style={{backgroundColor: 'rgba(222,222,222)' , color:'red'}} >

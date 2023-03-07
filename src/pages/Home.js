@@ -1,6 +1,6 @@
 import { collection, getDocs} from 'firebase/firestore'
 import React, { useCallback, useEffect, useState } from 'react'
-import { Button } from 'react-bootstrap';
+import { Button, Card, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
 import { authService, dbService } from '../firebaseConfig'
@@ -13,49 +13,45 @@ const wrongSound = new Audio(`${process.env.PUBLIC_URL}/sounds/wrong.mp3`);
 const Home = ({isLoggedIn}) => {
 	const [initQuiz, setInitQuiz] = useState([]); //퀴즈 데이터 불러오기
 	const [quiz, setQuiz] = useState("");  //퀴즈
-	const [answer, setAnswer] = useState(""); 
-	const [result, setResult] = useState("");
+	const [userAnswer, setUserAnswer] = useState(""); 
+	const [result, setResult] = useState(null);
 	const [score, setScore] = useState(0);
 	const [isPlaying, setIsPlaying] = useState(false);
 
+	const [endTime, setEndTime] = useState(0);
 
 
-	const StartGame = () =>{
-		setIsPlaying(true)
-	}
-
-	const randomValue = (array) =>{
-		const random = Math.floor(Math.random() * array.length)
-		return array[random]
-	}
-
-	const getInitQuiz = async () =>{
+	const getAllQuiz = async () =>{
 		try {
 			const initQuiz = await getDocs(collection(dbService, 'picturedb'));
 			const quizArray = initQuiz.docs.map((doc) => doc.data())
 			setInitQuiz(quizArray)
-			console.log("퀴즈 불러오기 완료")
+			// console.log("퀴즈 불러오기 완료")
 		}catch (error) {
 			console.log('에러', error);
 		}
 	};
-
+		
+	const randomValue = (array) =>{
+		const random = Math.floor(Math.random() * array.length)
+		return array[random]
+	}
 	const nextQuiz = useCallback(() => {
 		if (initQuiz.length > 0) {
-			console.log("퀴즈 준비")
-			console.log("생성된것: ", initQuiz)
+			// console.log("퀴즈 준비")
+			// console.log("생성된것: ", initQuiz)
 			setQuiz(randomValue(initQuiz))
 		}
 	}, [initQuiz]);
 
 	const handleAnswerChange = useCallback((e) => {
 		const {target : {value}} = e
-        setAnswer(value)
+        setUserAnswer(value)
 	}, []);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		if (quiz.answer === answer) {
+		if (quiz.answer === userAnswer) {
 			// 정답
 			setResult(`정답입니다!`);
 			setScore(score + 1);
@@ -69,49 +65,55 @@ const Home = ({isLoggedIn}) => {
 			setResult(`땡! 정답은 "${quiz.answer}" 입니다.`);
 			wrongSound.play();
 		}
-		setAnswer("");
+		setUserAnswer("");
 	};
 
+	const StartGame = () =>{
+		setIsPlaying(true)
+		setScore(0)
+		setResult("")
+		if (setIsPlaying && !initQuiz.length) {
+			getAllQuiz();
+		}
+	}
+
+	const onTimeStop = (time) =>{
+		setEndTime(time)
+	}
+
 	useEffect(() => {
-		if (!initQuiz.length) {
-			getInitQuiz();
-		} else if (initQuiz.length === 1) {
-			setInitQuiz([]);
-			setIsPlaying(false);
-			setResult("게임이 종료되었습니다.");
-		} else {
+		if (initQuiz.length) {
 			nextQuiz();
+		}else {
+			setIsPlaying(false);
+			setResult("게임 시작을 눌러주세요!");
 		}
 	}, [initQuiz, nextQuiz]);
 
-
 	return (
 		<div className={styles.container}>
-			{isLoggedIn	? null : <LoginForm/>}
+			{/* {isLoggedIn	? null : <LoginForm/>} */}
 			{isPlaying ? 
 				(
 				<div className={styles.flexCenter}>
-					<div className={styles["quiz-grid"]}>
-						{quiz?.answer && (
-							<div key={quiz.id}>
-							{quiz.answer}
-							{quiz.picture && (
-								<div className={styles.pictureWrapper}>
-									<img className={styles.picture} src={quiz.picture} alt="" />
-								</div>
-							)}
-							</div>
-						)}
-					</div>
-					<form onSubmit={handleSubmit}>
-						<input 
-							className={styles.quizInput}
-							type="text" 
-							value={answer} 
-							onChange={handleAnswerChange}
-							/>
-					</form>
-					{score === 0 ?  "" : (<div>score : {score}</div>)}
+					
+					<Card key={quiz.id} style={{ width: '24rem' }} >
+						<Card.Title>{quiz.answer}</Card.Title>
+						<div className={styles.pictureWrapper}>
+							<Card.Img variant="top" src={quiz.picture} className={styles.picture}></Card.Img>
+						</div>
+						<Card.Body>
+							<Form onSubmit={handleSubmit}>
+								<Form.Control 
+									size="lg" 
+									type="text"
+									value={userAnswer} 
+									onChange={handleAnswerChange}
+									/>
+							</Form>
+						</Card.Body>
+					</Card>
+					<p> 남은문제 : {initQuiz.length} 개</p>
 				</div>
 				)
 				:
@@ -119,11 +121,13 @@ const Home = ({isLoggedIn}) => {
 					<button className={styles.startButton} type='button' onClick={StartGame}>시작하기</button>
 				</>
 			}
-			<div>{result}</div>
-			<p> 맞춘문제 총 : {score} 개</p>
-			<Timer/>
+			<p style={{marginTop : '30px'}}>{result}</p>
+			{score === 0 ? "" : (<p>맞춘문제 총 : {score} 개</p>)}
+			<Timer isPlaying={isPlaying} onTimeStop={onTimeStop}/>
+			{/* <p>소요시간 :  {endTime}</p> */}
 		</div>
 	)
+	
 }
 
 export default Home

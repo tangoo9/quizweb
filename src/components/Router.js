@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes,} from 'react-router-dom'
 import { authService } from '../firebaseConfig'
 import Page404 from '../pages/404'
 import Home from '../pages/Home'
-import LogIn from '../pages/Login'
 import AddQuiz from '../pages/AddQuiz'
 import Quiz from '../pages/Quiz'
 import Ranking from '../pages/Ranking'
@@ -27,7 +26,6 @@ const AppRouter = ({isLoggedIn ,user}) => (
 					<Route path="/Quiztest" element={<QuizTest />} />
 					<Route path="/Ranking" element={<Ranking />} />
 					<Route path="/AddQuiz" element={<AddQuiz user={user} />} />
-					<Route path="/Login" element={<LogIn />} />
 					<Route path="/Invoices" element={<Invoices />}>
 						<Route path=":invoiceId" element={<Invoice />} />
 					</Route>

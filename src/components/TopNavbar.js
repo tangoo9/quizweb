@@ -15,19 +15,21 @@ const TopNavbar= ({isLoggedIn, user}) => {
 
     return (
         <>
-        <Navbar style={{backgroundColor: 'rgba(222,222,222)' , color:'red'}} >
+        <Navbar className='navbar' >
             <Container>
-                <Navbar.Brand as={Link} to="/">Home</Navbar.Brand>
+                <Navbar.Brand className="me-5" as={Link} to="/">Home</Navbar.Brand>
                 <Nav className="me-auto">
-                    <Nav.Link as={Link} to="/Quiz">Quiz</Nav.Link>
-                    <Nav.Link as={Link} to="/Ranking">Ranking</Nav.Link>
+                    <Nav.Link className="me-5" as={Link} to="/Quiz">Quiz</Nav.Link>
+                    <Nav.Link className="me-5" as={Link} to="/Ranking">Ranking</Nav.Link>
                         {isLoggedIn &&(
-                            <Nav.Link as={Link} to="/AddQuiz">AddQuiz</Nav.Link>
+                            <Nav.Link className="me-5" as={Link} to="/AddQuiz">AddQuiz</Nav.Link>
                         )}
                 </Nav>
                         {isLoggedIn &&(
                             <>
-                                <Nav.Item className="ms-auto">{user.displayName}님 안녕하세요.</Nav.Item>
+                                <Nav.Item className="ms-auto">
+                                    <span className='me-5'>{user.displayName}님 좋은 하루 되세요.</span>
+                                    </Nav.Item>
                                 <Button className="ml-3" type="button"onClick={onLogOut}>Log Out</Button>
                             </>
                         )}

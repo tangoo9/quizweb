@@ -1,10 +1,45 @@
 import React from 'react'
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, LinearScale, CategoryScale, BarElement, Title } from 'chart.js';
+import { Bar, Pie } from 'react-chartjs-2';
+
+export const options = {
+    indexAxis: 'y',  // horizontal로 막대그래프를 가로로 표시하고 싶을때 설정, 세로로하려면 지우면됨.
+    elements: {
+        bar: {
+        borderWidth: 2,
+        },
+    },
+    responsive: true,
+    plugins: {
+        legend : false,
+        // legend: {
+        //     position: 'right',
+        // },
+        title: {
+        display: true,
+        text: 'Chart.js Horizontal Bar Chart',
+        },
+    },
+    scales: {
+        x: {
+          display: false, // X 축 격자 눈금 숨기기
+        },
+        y: {
+        grid: {
+        // display: false, // Y 축 격자 눈금 숨기기
+        },
+    },
+    },
+};
 
 const ResultChart = () => {
     
-    ChartJS.register(ArcElement, Tooltip, Legend);
+    ChartJS.register(  CategoryScale,
+        LinearScale,
+        BarElement,
+        Title,
+        Tooltip,
+        Legend);
 
     const data = {
         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
@@ -35,7 +70,7 @@ const ResultChart = () => {
         
   return (
     <>
-        <Pie data={data}/>
+        <Bar data={data} options={options}/>
     </>
   )
 }

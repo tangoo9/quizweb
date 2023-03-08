@@ -12,6 +12,9 @@ import Invoices from '../pages/invoice'
 import Invoice from '../pages/invoices'
 import AppLayout from '../components/AppLayout'
 
+
+import QuizTest from '../pages/Quiz copy'
+
 const AppRouter = ({isLoggedIn ,user}) => (
 	<>
 		<BrowserRouter basename={process.env.PUBLIC_URL}>
@@ -21,6 +24,7 @@ const AppRouter = ({isLoggedIn ,user}) => (
 				<Routes>
 					<Route path="/" element={<Home isLoggedIn={isLoggedIn} />} />
 					<Route path="/Quiz" element={<Quiz />} />
+					<Route path="/Quiztest" element={<QuizTest />} />
 					<Route path="/Ranking" element={<Ranking />} />
 					<Route path="/AddQuiz" element={<AddQuiz user={user} />} />
 					<Route path="/Login" element={<LogIn />} />

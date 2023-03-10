@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { addDoc, collection, serverTimestamp  } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { v4 } from 'uuid';
@@ -9,8 +9,8 @@ import styles from "../css/AddQuiz.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {Button, Card, Form } from 'react-bootstrap';
-import { useRef } from 'react';
-import { useCallback } from 'react';
+
+import ImageResizer from 'react-image-file-resizer'
 
 
 
@@ -18,6 +18,12 @@ const AddQuiz = ({user}) => {
     const [docs, setDocs ] = useState('');
 	const [attachment, setAttachment] = useState('');
 	const imageInput = useRef();
+
+	const quility = 60;
+	const maxWidth = 640;
+	const maxHeight = 480;
+	const ImageType = 'png'
+
     // console.log(user)
 	// console.log("시간", serverTimestamp())
     const onSubmit = async (e) =>{
@@ -41,7 +47,7 @@ const AddQuiz = ({user}) => {
 			creatorId: user.uid,
 			createdAt: serverTimestamp(),
 			picture : AttachmentUrl,
-			userNickName : user?.displayName,
+			userNickname : user?.displayName,
 		}
 		try{
 			const docRef = await addDoc(collection(dbService, "picturedb"),  picturePost);
@@ -59,16 +65,40 @@ const AddQuiz = ({user}) => {
 		setDocs(value); 
 	}
 
+	// const onFileChange = (e) =>{
+	// 	const {target: {files}} = e;
+	// 	const theFile = files[0];
+	// 	const reader = new FileReader()
+	// 	reader.onloadend = (finishedEvent) =>{
+	// 		const {currentTarget :{result}} = finishedEvent;
+	// 		setAttachment(result)
+	// 	}
+	// 	reader.readAsDataURL(theFile);
+	// }
+
 	const onFileChange = (e) =>{
-		const {target: {files}} =e;
+		const {target: {files}} = e;
 		const theFile = files[0];
-		const reader = new FileReader()
-		reader.onloadend = (finishedEvent) =>{
-			const {currentTarget :{result}} = finishedEvent;
-			setAttachment(result)
-		}
-		reader.readAsDataURL(theFile);
+		ImageResizer.imageFileResizer(
+			theFile,
+			maxWidth,
+			maxHeight,
+			ImageType,
+			quility,
+			0,
+			(resizedFile) =>{
+				const reader = new FileReader()
+				reader.readAsDataURL(resizedFile);
+				console.log(resizedFile)
+				reader.onloadend = (finishedEvent) =>{
+					const {currentTarget :{result}} = finishedEvent;
+					setAttachment(result)
+				}
+			},
+			'file'
+		)
 	}
+	
 	
 	const onRemoveImage =()=>{
 		setAttachment("")
@@ -81,7 +111,7 @@ const AddQuiz = ({user}) => {
     return (
         <div className={styles.container}>
 			<form onSubmit={onSubmit}>
-				<Card style={{ width: '30rem' }}>
+				<Card style={{ width: '450px' }}>
 					{attachment && (
 						<>
 							<div className={styles.attachmentWrapper}>
@@ -141,7 +171,7 @@ const AddQuiz = ({user}) => {
 					</Card.Body>
 				</Card>
 			</form>
-			{/* <DocRead/> */}
+			<DocRead user={user}/>
 			{/* <p>닉네임 : {user?.displayName}</p>
 			<p>이메일 : {user?.email}</p>
 			<p>연락처 : {user?.phoneNumber}</p> */}

@@ -10,7 +10,7 @@ const DocRead = ({user, isOwner}) => {
 	useEffect(()=>{
 		const q = query(
 			collection(dbService, "picturedb"),
-			orderBy("createdAt", "asc")
+			orderBy("answer", "asc")
 			)
 			onSnapshot(q, (snapshot) => {
 			const docDataArray = snapshot.docs.map((doc) => ({
@@ -22,14 +22,14 @@ const DocRead = ({user, isOwner}) => {
 	},[])
 
     return (
-        <div >	
-            {docData.map(docData => (
-                <div key={docData.id} style={{width:'500px'}}>
-                    {docData.picture && <img style={{width:'400px', height:'300px'}} src={docData.picture} alt="" />}
-                    {docData.answer}
-                </div>
-            ))} 
-        </div>
+        <>
+		{docData.map(docData => (
+				<div key={docData.id} style={{width:'500px'}}>
+					{docData.picture && <img style={{width:'400px', height:'300px'}} src={docData.picture} alt="" />}
+					{docData.answer}
+				</div>
+			))}	
+        </>
     )
 }
 

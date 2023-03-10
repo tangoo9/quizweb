@@ -1,13 +1,14 @@
 {
   "files": {
-    "main.css": "/quizweb/static/css/main.0f13d0a3.css",
-    "main.js": "/quizweb/static/js/main.9af86b03.js",
+    "main.css": "/quizweb/static/css/main.40263f82.css",
+    "main.js": "/quizweb/static/js/main.201e9baa.js",
+    "static/media/woozoo.jpeg": "/quizweb/static/media/woozoo.2de0e950974ede3d298c.jpeg",
     "index.html": "/quizweb/index.html",
-    "main.0f13d0a3.css.map": "/quizweb/static/css/main.0f13d0a3.css.map",
-    "main.9af86b03.js.map": "/quizweb/static/js/main.9af86b03.js.map"
+    "main.40263f82.css.map": "/quizweb/static/css/main.40263f82.css.map",
+    "main.201e9baa.js.map": "/quizweb/static/js/main.201e9baa.js.map"
   },
   "entrypoints": [
-    "static/css/main.0f13d0a3.css",
-    "static/js/main.9af86b03.js"
+    "static/css/main.40263f82.css",
+    "static/js/main.201e9baa.js"
   ]
 }

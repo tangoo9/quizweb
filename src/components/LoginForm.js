@@ -23,7 +23,6 @@ import {
 from 'mdb-react-ui-kit';
 import { faFacebook, faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import '../css/Home.css'
 
 
 
@@ -85,7 +84,7 @@ function LoginForm() {
                                 <MDBInput wrapperClass='mb-3 d-flex flex-column-reverse' label='Password' id='form2' type='password'/>
                                 <Button className="mb-4 w-100 gradient-custom-2">로그인</Button>
                             </div>
-                            <p className="text-center mt-3"><hr></hr></p>
+                            <hr></hr>
                             <p>Social Login</p>
                             <div className='d-flex justify-content-around mx-auto' style={{width: '100%'}}>
                                 <Button 

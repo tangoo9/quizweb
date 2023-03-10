@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 
-const Timer = ({isPlaying, onTimeStop}) => {
+const Timer = ({isPlaying, onTimeStop, endTimeRef, isGameEnd}) => {
     const [timer, setTimer] = useState(0);
-    const [endTime, setEndTime] = useState(0);
+    
     
     useEffect(() => {
         let timerId;
@@ -14,12 +14,19 @@ const Timer = ({isPlaying, onTimeStop}) => {
         return () => {
             clearTimeout(timerId);
             if (!isPlaying) {
-                setEndTime(timer);
+                // setEndTime(timer);
                 onTimeStop(timer);
                 setTimer(0)
             }
+
+            // if (isGameEnd) {
+            //     endTimeRef.current = timer;
+            // }
+            if(!isPlaying){
+               
+            }
         };
-    }, [isPlaying, timer, onTimeStop, endTime]);
+    }, [isPlaying, timer, onTimeStop]);
 
     const formatTime = (time) => {
         const minutes = Math.floor(time / 60000).toString().padStart(2, '0');

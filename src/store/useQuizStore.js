@@ -29,6 +29,7 @@ import {devtools} from 'zustand/middleware'
 //     removeAllBears: () => set({ bears: 0 }),
 // }))
 
+    
 const useBearStore = create(devtools((set) => ({
     bears: 0,
     increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
@@ -37,3 +38,8 @@ const useBearStore = create(devtools((set) => ({
 
 
 export default useBearStore;
+
+export const useBooleanStore = create((set) => ({
+    booleanState: false,
+    setBooleanState: (newValue) => set({ booleanState: newValue }),
+    }));

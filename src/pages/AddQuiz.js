@@ -1,23 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import { addDoc, collection, serverTimestamp  } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
-import DocRead from '../components/GetDocs';
 import { v4 } from 'uuid';
 import { dbService, storageService } from '../firebaseConfig';
+
+import DocRead from '../components/GetDocs';
 import styles from "../css/AddQuiz.module.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClose, faPlus } from '@fortawesome/free-solid-svg-icons';
+import {Button, Card, Form } from 'react-bootstrap';
+import { useRef } from 'react';
+import { useCallback } from 'react';
+
 
 
 const AddQuiz = ({user}) => {
     const [docs, setDocs ] = useState('');
 	const [attachment, setAttachment] = useState('');
-    console.log(user)
-	console.log("시간", serverTimestamp())
+	const imageInput = useRef();
+    // console.log(user)
+	// console.log("시간", serverTimestamp())
     const onSubmit = async (e) =>{
-		if (docs === "") {
+		e.preventDefault();
+		if (!docs || !attachment) {
+			alert(!docs ? "퀴즈 정답을 추가 해주세요" : "사진 파일을 추가 해주세요");
 			return;
 		}
-		e.preventDefault();
-
 		let AttachmentUrl ="";
 		//첨부파일이 없을때
 		if(attachment !== ""){
@@ -30,17 +38,18 @@ const AddQuiz = ({user}) => {
 		}
 		const picturePost = {
 			answer:docs,
-			createdAt: serverTimestamp(),
 			creatorId: user.uid,
+			createdAt: serverTimestamp(),
 			picture : AttachmentUrl,
+			userNickName : user?.displayName,
 		}
 		try{
 			const docRef = await addDoc(collection(dbService, "picturedb"),  picturePost);
 			console.log("Document written with ID: ", docRef.id);
+			alert("문제를 성공적으로 추가했어요!!")
 		}catch(error){
 			console.log(error)
 		}
-		
 		setDocs("")
 		setAttachment("")
 	}
@@ -65,47 +74,77 @@ const AddQuiz = ({user}) => {
 		setAttachment("")
 	}
 
+    const handleImageUpload = useCallback(() =>{   
+        imageInput.current.click();
+    },[imageInput])
+
     return (
         <div className={styles.container}>
-            <form onSubmit={onSubmit} >
-			<div >
-				<input 
-					type="text" 
-					value={docs}
-					onChange={onChange} 
-					placeholder="문제를 입력하세요." 
-					maxLength={120}/>
-				<input type="submit" value="추가"/>
-			</div>
-			<label htmlFor="attach-file">
-				<span>사진 or 그림 추가하기</span>
-				<span>+</span>
-			</label>
-			<input
-				id="attach-file"
-				type="file"
-				accept="image/*"
-				onChange={onFileChange}
-				style={{
-				display :'none'
-				}}
-			/>
-			{attachment &&   (
-				<div >
-					<img src={attachment} alt="none"             
-						style={{backgroundImage: attachment}}/>
-					<button onClick={onRemoveImage}>
-						<span>
-							선택 취소
-						</span>
-						<span>x</span>
-					</button>
-				</div>
-			)}
-    		</form>
-			<p>닉네임 : {user?.displayName}</p>
+			<form onSubmit={onSubmit}>
+				<Card style={{ width: '30rem' }}>
+					{attachment && (
+						<>
+							<div className={styles.attachmentWrapper}>
+								<Card.Img 
+									src={attachment} 
+									alt="Image"             
+									style={{backgroundImage: attachment}} />
+							</div>
+						</>
+					)}
+					<Card.Body>
+						{/* <Card.Title>Card Title</Card.Title> */}
+						<Form.Control 
+							style={{textAlign:'center'}}
+							type="text" 
+							value={docs}
+							onChange={onChange} 
+							maxLength={120}
+							placeholder="퀴즈를 추가해 보세요!" />
+						{attachment 
+						? 
+						(
+							<div className={styles.sumitBtnWrapper}>
+								<Button className="mx-3 my-3" type="button" variant="danger" onClick={onRemoveImage}>
+									<span>선택 취소</span>
+									{' '}
+									<FontAwesomeIcon icon={faClose}/>
+								</Button>
+								<Button className="mx-3 my-3"type="submit">
+									<span>문제 등록!</span>
+								</Button>
+							</div>
+						)
+						:(
+							<>
+								<Form.Group>
+									<Form.Label htmlFor='attach-file'>
+										<Button
+											onClick={handleImageUpload} 
+											className="mt-3 py-2" variant="primary">
+												<span>그림 & 사진</span>
+												{' '}
+												<FontAwesomeIcon icon={faPlus} />
+										</Button>
+									</Form.Label>
+									<Form.Control 
+										ref={imageInput}
+										type="file"
+										accept="image/*"
+										onChange={onFileChange}
+										style={{display:'none'}}
+										/>
+								</Form.Group>
+							</>
+						)
+						}
+					</Card.Body>
+				</Card>
+			</form>
+			{/* <DocRead/> */}
+			{/* <p>닉네임 : {user?.displayName}</p>
 			<p>이메일 : {user?.email}</p>
-			<p>연락처 : {user?.phoneNumber}</p>
+			<p>연락처 : {user?.phoneNumber}</p> */}
         </div>
     )
 }

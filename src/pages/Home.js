@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import QuizCard from '../components/QuizCard'
 import QuizInput from '../components/QuizInput'
 import LoginForm from '../components/LoginForm';
-import '../css/Home.css'
+
 import {
 	MDBContainer,
 	MDBRow,
@@ -20,16 +20,22 @@ const Home = ({isLoggedIn}) => {
     }
     return (
         <>
-            <MDBContainer className="my-5 gradient-form">
+            <MDBContainer className="my-3 gradient-form">
                 <MDBRow>
                     <MDBCol col='6' className="mb-5">
-                        <div className="d-flex flex-column  justify-content-center gradient-custom-2 h-100 mb-4">
-                            <div className="text-white px-3 py-4 p-md-5 mx-md-4">
-                                <h4 class="mb-4">게임 안내가 어쩌구 저쩌구.. 소셜로그인 해보라고 어쩌구.. </h4>
-                                <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                </p>
+                        <div className="mainInfo d-flex flex-column  justify-content-center h-100 mb-4">
+                            <div className="text-white px-1 py-2 p-md-2 mx-md-4">
+                            <h4 className="text-white mb-5" style={{whiteSpace: 'nowrap'}}>
+                                    <span className="d-block d-md-inline-block">
+                                        PictureQuiz에
+                                    </span>
+                                    {' '}
+                                    <span className="d-block d-md-inline-block">
+                                        오신것을 환영합니다!
+                                    </span>
+                                </h4>
+                                <p className="mb-2">사진 속 랜덤 퀴즈를 맞춰 보세요!</p>
+                                <p className="mb-0">로그인을 하시면 직접 퀴즈를 출제할 수도 있어요!</p>
                             </div>
                         </div>
                     </MDBCol>

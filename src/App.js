@@ -13,8 +13,7 @@ function App() {
 
 
 	useEffect(()=>{
-		const auth = authService;
-		onAuthStateChanged(auth, (user)=>{
+		onAuthStateChanged(authService, (user)=>{
 			if(user){
 				setUser(user)
 			}else{

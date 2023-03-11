@@ -24,9 +24,9 @@ const DocRead = ({user, isOwner}) => {
     return (
         <>
 		{docData.map(docData => (
-				<div key={docData.id} style={{width:'500px'}}>
-					{docData.picture && <img style={{width:'400px', height:'300px'}} src={docData.picture} alt="" />}
-					{docData.answer}
+				<div key={docData.id} className="mt-3" style={{width:'500px'}}>
+					{docData.picture && <img style={{width:'400px', height:'300px', objectFit:'cover'}} src={docData.picture} alt="" />}
+					<p>{docData.answer}</p>
 				</div>
 			))}	
         </>

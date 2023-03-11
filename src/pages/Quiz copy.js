@@ -12,7 +12,7 @@ import { faCoffee, faSpinner} from '@fortawesome/free-solid-svg-icons';
 import styles from "../css/Quiz.module.css";
 import Timer from '../components/Timer';
 
-
+import { useQuizStore } from '../store';
 
 const correctSound = new Audio(`${process.env.PUBLIC_URL}/sounds/correct.mp3`);
 const wrongSound = new Audio(`${process.env.PUBLIC_URL}/sounds/wrong.mp3`);
@@ -23,11 +23,15 @@ const QuizTest = () => {
 	const [initQuiz, setInitQuiz] = useState([]); //퀴즈 데이터 불러오기
 	const [quiz, setQuiz] = useState("");  //퀴즈
 	const [userAnswer, setUserAnswer] = useState(""); 
-	const [result, setResult] = useState(null);
+	// const [result, setResult] = useState(null);
 	const [score, setScore] = useState(null);
 	const [endTime, setEndTime] = useState(0);
 
-	const [isPlaying, setIsPlaying] = useState(false);
+	// const [isPlaying, setIsPlaying] = useState(false);
+	const {
+		isPlaying , setIsPlaying,
+		result, setResult
+	} = useQuizStore();
 
 
 

@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react'
+import { useQuizStore } from '../store';
 
-const Timer = ({isPlaying, onTimeStop, endTimeRef, isGameEnd}) => {
+const Timer = () => {
     const [timer, setTimer] = useState(0);
-    
+    const endTimeRef = useRef(0);
+    const {isPlaying, setEndTime, isGameEnd,} = useQuizStore();
     
     useEffect(() => {
         let timerId;
@@ -14,19 +16,16 @@ const Timer = ({isPlaying, onTimeStop, endTimeRef, isGameEnd}) => {
         return () => {
             clearTimeout(timerId);
             if (!isPlaying) {
-                // setEndTime(timer);
-                onTimeStop(timer);
                 setTimer(0)
             }
-
-            // if (isGameEnd) {
-            //     endTimeRef.current = timer;
-            // }
-            if(!isPlaying){
-               
+            
+            // 게임이 종료되었으면 종료시간을 저장
+            if(isGameEnd) {
+                endTimeRef.current = timer
+                setEndTime(endTimeRef.current);
             }
         };
-    }, [isPlaying, timer, onTimeStop]);
+    }, [isPlaying, timer, isGameEnd, setEndTime]);
 
     const formatTime = (time) => {
         const minutes = Math.floor(time / 60000).toString().padStart(2, '0');
@@ -35,16 +34,10 @@ const Timer = ({isPlaying, onTimeStop, endTimeRef, isGameEnd}) => {
         return `${minutes}:${seconds}:${milliseconds}`;
     }
 
-    // const stopTimer = () =>{
-    //     setIsPlaying(false);
-    //     setTimer(0);
-    // }
 
     return (
         <>
         <h1>{formatTime(timer)}</h1>
-        {/* <button type='button' onClick={() =>setIsPlaying(true)}>타이머시작</button> */}
-        {/* <button type='button' onClick={stopTimer}>타이머 종료</button> */}
         </>
     )
 }

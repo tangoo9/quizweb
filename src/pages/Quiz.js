@@ -10,7 +10,7 @@ import { faSpinner} from '@fortawesome/free-solid-svg-icons';
 
 import styles from "../css/Quiz.module.css";
 import Timer from '../components/Timer';
-import { useRef } from 'react';
+import { useQuizStore } from '../store';
 
 const correctSound = new Audio(`${process.env.PUBLIC_URL}/sounds/correct.mp3`);
 const wrongSound = new Audio(`${process.env.PUBLIC_URL}/sounds/wrong.mp3`);
@@ -19,12 +19,19 @@ const Quiz = () => {
 	const [initQuiz, setInitQuiz] = useState([]); //퀴즈 데이터 불러오기
 	const [quiz, setQuiz] = useState("");  //퀴즈
 	const [userAnswer, setUserAnswer] = useState(""); 
-	const [result, setResult] = useState(null);
 	const [score, setScore] = useState(null);
-	const [isPlaying, setIsPlaying] = useState(false);
-	const [isGameEnd, setIsGameEnd] = useState(false);
-	const [endTime, setEndTime] = useState("")
-	const endTimeRef = useRef(0);
+	// const [result, setResult] = useState(null);
+	// const [isPlaying, setIsPlaying] = useState(false);
+	// const [isGameEnd, setIsGameEnd] = useState(false);
+	// const [endTime, setEndTime] = useState("")
+	
+
+	const {
+		isPlaying , setIsPlaying,
+		result, setResult,
+		endTime, setEndTime,
+		isGameEnd, setIsGameEnd,
+	} = useQuizStore();
 
 
 	const getAllQuiz = async () =>{
@@ -56,9 +63,7 @@ const Quiz = () => {
 		}
 	}, [initQuiz]);
 
-	const onTimeStop = (time) =>{
-		setEndTime(time)
-	}
+	
 
 	const handleAnswerChange = useCallback((e) => {
 		const {target : {value}} = e
@@ -84,7 +89,6 @@ const Quiz = () => {
 		setUserAnswer("");
 		if (initQuiz.length <= 1) {
 			setIsGameEnd(true);
-			setEndTime(endTimeRef.current)
 		}
 	};
 
@@ -113,7 +117,7 @@ const Quiz = () => {
 			console.log("게임 종료시간입니다.", endTime)
 			console.log("게임 종료", isGameEnd)
 		}
-	}, [isGameEnd, endTime]);
+	}, [endTime]);
 
 	// 임시
 	const formatTime = (time) => {
@@ -165,7 +169,7 @@ const Quiz = () => {
 			}
 			<p style={{marginTop : '30px'}}>{result}</p>
 			{score === null ? "" : (<p>맞춘문제 총 : {score} 개</p>)}
-			<Timer isPlaying={isPlaying} onTimeStop={onTimeStop} endTimeRef={endTimeRef} isGameEnd={isGameEnd}/>
+			<Timer />
 			{/* {isGameEnd && <p>소요시간 :  {formatTime(endTime)}</p>} */}
 		</Container>
 	)

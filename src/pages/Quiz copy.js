@@ -2,7 +2,6 @@ import { collection, getDocs} from 'firebase/firestore'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Button, Card, Col, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import {create} from 'zustand'
 
 import { authService, dbService } from '../firebaseConfig'
 
@@ -15,25 +14,10 @@ import Timer from '../components/Timer';
 
 
 
-import useBearStore, { useBooleanStore } from '../store/useQuizStore';
-
 const correctSound = new Audio(`${process.env.PUBLIC_URL}/sounds/correct.mp3`);
 const wrongSound = new Audio(`${process.env.PUBLIC_URL}/sounds/wrong.mp3`);
 
 const QuizTest = () => {
-	// const {initQuiz, quiz, userAnswer, result, score, isPlaying, endTime} = useQuizStore();
-
-	// const { bears, increasePopulation, removeAllBears } = useBearStore();
-
-	const bears = useBearStore((state) => state.bears)
-
-	const increasePopulation = useBearStore((state) => state.increasePopulation)
-	const removeAllBears = useBearStore((state) => state.removeAllBears)
-
-	const useQuizStore = create((set) =>({
-		isPlaying : false,
-		setIsPlaying: (value) => set({isPlaying : value})
-	}))
 
 
 	const [initQuiz, setInitQuiz] = useState([]); //퀴즈 데이터 불러오기
@@ -43,23 +27,8 @@ const QuizTest = () => {
 	const [score, setScore] = useState(null);
 	const [endTime, setEndTime] = useState(0);
 
-	// const {isPlaying, setIsPlaying} = useQuizStore();
 	const [isPlaying, setIsPlaying] = useState(false);
 
-
-	const stores = create((set) => ({
-    bears: 0,
-    increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
-    removeAllBears: () => set({ bears: 0 }),
-}))
-
-
-
-	// const useQuizStore = create((set) => ({
-	// 	isPlaying: false,
-	// 	gameStart: () => set((state) => ({ isPlaying: true })),
-	// }))
-	// const [isPlaying, setIsPlaying] = useState(false);
 
 
 	const getAllQuiz = async () =>{
@@ -142,30 +111,6 @@ const QuizTest = () => {
 	})
 
 
-	// /테스트
-
-
-		const { booleanState, setBooleanState } = useBooleanStore();
-		
-		// useEffect(() => {
-		// 	setBooleanState(true);
-		// }, []);
-
-		function handleClick() {
-			setBooleanState(prev=>!prev);
-		}
-
-		const [count, setCount] = useState(0);
-
-		useEffect(() => {
-		  if (count > 5) {
-			console.log("count is greater than 5");
-		  }
-	  
-		  return () => {
-			console.log("effect cleanup");
-		  };
-		}, [count]);
 	  
 
 	return (
@@ -212,21 +157,6 @@ const QuizTest = () => {
 			{/* <Timer isPlaying={isPlaying} onTimeStop={onTimeStop}/> */}
 			{/* <p>소요시간 :  {endTime}</p> */}
 		</div>
-		<>
-
-
-			<div>ㅎㅎ</div>
-			<h1>{isPlaying ? '트루' : 'false'}</h1>
-			{/* <h1>{bears} around here ...</h1>
-			<button onClick={increasePopulation}>one up</button>
-			<button onClick={removeAllBears}>remove</button> */}
-			<button onClick={()=>{setIsPlaying(true)}}>remove</button>
-			<div>
-			<p>Boolean state value: {booleanState.toString()}</p>
-			<button onClick={handleClick}>Set to {booleanState ? "true" : "falses"}</button>
-			<button onClick={() => setCount(count + 1)}>Increment Count</button>
-			</div>
-		</>
 	</>
 	)
 }

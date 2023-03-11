@@ -31,7 +31,7 @@ function App() {
 		<div className="App">
 			{/* <div className="box vibration"></div> */}
 			<AppRouter isLoggedIn={user ? true : false} user={user}/>
-			<footer className="footer">&copy; PictureQuiz {new Date().getFullYear()}<div>최신업데이트 : 03-10 13:17</div></footer> 
+			<footer className="footer">&copy; PictureQuiz {new Date().getFullYear()}<div>최신업데이트 : 03-11 04:39</div></footer> 
 			{/* <Home/> */}
 		</div>
 	);

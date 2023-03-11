@@ -13,6 +13,7 @@ import AppLayout from '../components/AppLayout'
 
 
 import QuizTest from '../pages/Quiz copy'
+import ZustandTest from '../pages/ZustandTest'
 
 const AppRouter = ({isLoggedIn ,user}) => (
 	<>
@@ -24,6 +25,7 @@ const AppRouter = ({isLoggedIn ,user}) => (
 					<Route path="/" element={<Home isLoggedIn={isLoggedIn} />} />
 					<Route path="/Quiz" element={<Quiz />} />
 					<Route path="/Quiztest" element={<QuizTest />} />
+					<Route path="/ZustandTest" element={<ZustandTest />} />
 					<Route path="/Ranking" element={<Ranking />} />
 					<Route path="/AddQuiz" element={<AddQuiz user={user} />} />
 					<Route path="/Invoices" element={<Invoices />}>

@@ -4,7 +4,7 @@ import { FacebookAuthProvider, GithubAuthProvider, GoogleAuthProvider, signInWit
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '../firebaseConfig';
+import { authService, dbService } from '../firebaseConfig';
 
 import {
 	MDBBtn,
@@ -23,6 +23,7 @@ import {
 from 'mdb-react-ui-kit';
 import { faFacebook, faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { addDoc, collection, doc, getDoc, setDoc } from 'firebase/firestore';
 
 
 
@@ -39,6 +40,27 @@ function LoginForm() {
 
     const navigate = useNavigate()
 
+    // const onSocialLogin = async (e) =>{
+    //     const {target: {name} } = e;
+    //     // console.log(e.target.name);
+    //     let provider;
+    //     try{
+    //         if(name === 'google'){
+    //             provider = new GoogleAuthProvider();
+    //         }else if(name === 'facebook'){
+    //             provider = new FacebookAuthProvider();
+    //         }else if(name === 'github'){
+    //             provider = new GithubAuthProvider();
+                
+    //         }
+    //         const data = await signInWithPopup(authService, provider)
+    //         // console.log(data);
+    //         navigate('/')
+    //     }catch(error){
+    //         console.log("로그인 에러!! : ", error)
+    //     }
+    // }
+    
     const onSocialLogin = async (e) =>{
         const {target: {name} } = e;
         // console.log(e.target.name);
@@ -52,8 +74,16 @@ function LoginForm() {
                 provider = new GithubAuthProvider();
                 
             }
-            const data = await signInWithPopup(authService, provider)
-            // console.log(data);
+            const {user} = await signInWithPopup(authService, provider)
+            const { displayName, email, photoURL, uid } = user;
+            const userData = {displayName, email, photoURL, uid}
+
+            // Users Collection에 user uid값을 문서의 id값이 되도록 생성 ... 
+            // doc(db,"docPath",참조변수)
+            const userDocRef = doc(dbService, "Users", uid);
+            // setDoc : 문서를 업데이트하거나 생성...  
+            // setDoc(참조변수, 데이터, 옵션)
+            await setDoc(userDocRef, userData);
             navigate('/')
         }catch(error){
             console.log("로그인 에러!! : ", error)

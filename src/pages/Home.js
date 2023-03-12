@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-import QuizCard from '../components/QuizCard'
-import QuizInput from '../components/QuizInput'
 import LoginForm from '../components/LoginForm';
 
 import {
@@ -11,13 +9,8 @@ import {
 from 'mdb-react-ui-kit';
 
 const Home = ({isLoggedIn}) => {
-    const [input, setInput] = useState('')
+    
 
-    const onChageInput = (e) =>{
-        const {target : {value}} = e
-        console.log(value)
-        setInput(value)
-    }
     return (
         <>
             <MDBContainer className="my-3 gradient-form">
@@ -42,9 +35,6 @@ const Home = ({isLoggedIn}) => {
                     {isLoggedIn	? null : <LoginForm/>}
                 </MDBRow>
             </MDBContainer>
-            {/* <QuizCard/> */}
-            {/* <input value={input} onChange={onChageInput}></input> */}
-			{/* <QuizInput/> */}
         </>
     )
 }

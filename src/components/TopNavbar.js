@@ -26,8 +26,8 @@ const TopNavbar= ({isLoggedIn, user}) => {
                     className={`${location.pathname ==='/' ? 'active' : ''} me-3 me-sm-5`}as={Link} to="/">Home</Nav.Link>
                 <Nav.Link 
                     className={`${location.pathname ==='/Quiz' ? 'active' : ''} me-3 me-sm-5`} as={Link} to="/Quiz">Quiz</Nav.Link>
-                {/* <Nav.Link 
-                    className={`${location.pathname ==='/Ranking' ? 'active' : ''} me-3 me-sm-5`} as={Link} to="/Ranking">Ranking</Nav.Link> */}
+                <Nav.Link 
+                    className={`${location.pathname ==='/Ranking' ? 'active' : ''} me-3 me-sm-5`} as={Link} to="/Ranking">Ranking</Nav.Link>
             {isLoggedIn 
             ? 
             (<>

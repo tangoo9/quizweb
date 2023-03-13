@@ -15,9 +15,6 @@ import { useNavigate } from 'react-router-dom';
 import { authService, dbService } from '../firebaseConfig';
 
 import {
-	MDBBtn,
-	MDBContainer,
-	MDBRow,
 	MDBCol,
 	MDBInput,
     MDBTabs,
@@ -25,7 +22,6 @@ import {
 	MDBTabsLink,
 	MDBTabsContent,
 	MDBTabsPane,
-	MDBIcon,
 	MDBCheckbox
 }
 from 'mdb-react-ui-kit';

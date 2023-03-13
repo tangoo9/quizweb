@@ -4,7 +4,7 @@ import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { v4 } from 'uuid';
 import { dbService, storageService } from '../firebaseConfig';
 
-import DocRead from '../components/GetDocs';
+import QuizPosts from '../components/QuizPosts';
 import styles from "../css/AddQuiz.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -12,17 +12,15 @@ import {Button, Card, Form } from 'react-bootstrap';
 
 import ImageResizer from 'react-image-file-resizer'
 
+import {useUserStore} from '../store'
 
-
-const AddQuiz = ({user}) => {
+const AddQuiz = () => {
     const [docs, setDocs ] = useState('');
 	const [attachment, setAttachment] = useState('');
 	const imageInput = useRef();
 
-	const quility = 60;
-	const maxWidth = 640;
-	const maxHeight = 480;
-	const ImageType = 'png'
+	const {user, setUser} = useUserStore();
+	
 
     // console.log(user)
 	// console.log("시간", serverTimestamp())
@@ -79,12 +77,18 @@ const AddQuiz = ({user}) => {
 	const onFileChange = (e) =>{
 		const {target: {files}} = e;
 		const theFile = files[0];
+		const options = {
+			quility : 100,
+			maxWidth : 640,
+			maxHeight : 480,
+			ImageType : 'png', //jpeg일때만 quality값 적용됨
+		}
 		ImageResizer.imageFileResizer(
 			theFile,
-			maxWidth,
-			maxHeight,
-			ImageType,
-			quility,
+			options.maxWidth,
+			options.maxHeight,
+			options.ImageType,
+			options.quility,
 			0,
 			(resizedFile) =>{
 				const reader = new FileReader()
@@ -111,7 +115,7 @@ const AddQuiz = ({user}) => {
     return (
         <div className={styles.container}>
 			<form onSubmit={onSubmit}>
-				<Card style={{ width: '450px' }}>
+				<Card style={{ width: '400px' }}>
 					{attachment && (
 						<>
 							<div className={styles.attachmentWrapper}>
@@ -130,7 +134,7 @@ const AddQuiz = ({user}) => {
 							value={docs}
 							onChange={onChange} 
 							maxLength={120}
-							placeholder="퀴즈를 추가해 보세요!" />
+							placeholder="새로운 퀴즈를 추가해 보세요!" />
 						{attachment 
 						? 
 						(
@@ -171,7 +175,7 @@ const AddQuiz = ({user}) => {
 					</Card.Body>
 				</Card>
 			</form>
-			<DocRead user={user}/>
+			<QuizPosts/>
 			{/* <p>닉네임 : {user?.displayName}</p>
 			<p>이메일 : {user?.email}</p>
 			<p>연락처 : {user?.phoneNumber}</p> */}

@@ -6,11 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import { authService, dbService } from '../firebaseConfig'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner} from '@fortawesome/free-solid-svg-icons';
+import { FadeLoader } from 'react-spinners';
 
 import styles from "../css/Quiz.module.css";
 import Timer from '../components/Timer';
 import { useQuizStore } from '../store';
+import BarLoader from 'react-spinners/BarLoader';
 
 const correctSound = new Audio(`${process.env.PUBLIC_URL}/sounds/correct.mp3`);
 const wrongSound = new Audio(`${process.env.PUBLIC_URL}/sounds/wrong.mp3`);
@@ -20,10 +21,12 @@ const Quiz = () => {
 	const [quiz, setQuiz] = useState("");  //퀴즈
 	const [userAnswer, setUserAnswer] = useState(""); 
 	const [score, setScore] = useState(null);
+	const [isLoading, setIsLoading] = useState(false);
 	// const [result, setResult] = useState(null);
 	// const [isPlaying, setIsPlaying] = useState(false);
 	// const [isGameEnd, setIsGameEnd] = useState(false);
 	// const [endTime, setEndTime] = useState("")
+	
 	
 
 	const {
@@ -36,9 +39,11 @@ const Quiz = () => {
 
 	const getAllQuiz = async () =>{
 		try {
-			const initQuiz = await getDocs(collection(dbService, 'picturedb'));
-			const quizArray = initQuiz.docs.map((doc) => doc.data())
+			setIsLoading(true)
+			const getQuizDocs = await getDocs(collection(dbService, 'picturedb'));
+			const quizArray = getQuizDocs.docs.map((doc) => doc.data())
 			setInitQuiz(quizArray)
+			setIsLoading(false)
 			// console.log("퀴즈 불러오기 완료")
 		}catch (error) {
 			console.log('에러', error);
@@ -127,50 +132,66 @@ const Quiz = () => {
         return `${minutes}:${seconds}:${milliseconds}`;
     }
 
-	return (
-		<Container className='my-3 d-flex flex-column justify-content-center'>
-			{isPlaying ? 
-				(
-				<div className={styles.flexCenter}>
-					<Card key={quiz?.id} style={{ width: '20rem' }} >
-						{/* <Card.Title>{quiz.answer}</Card.Title> */}
-						<div className={styles.pictureWrapper}>
-							<Card.Img variant="top" src={quiz.picture} className={styles.picture}></Card.Img>
-						</div>
-						<Card.Body>
-							<Form onSubmit={handleSubmit} >
-								<Form.Control 
-									style={{ textAlign: "center" }} 
-									size="lg" 
-									type="text"
-									value={userAnswer} 
-									onChange={handleAnswerChange}
-									/>
-							</Form>
-						</Card.Body>
-					</Card>
-					<p> 남은문제 : {initQuiz.length} 개</p>
 
-				</div>
-				)
-				:
-				(
+	return (
+		<Container className='my-5 d-flex flex-column justify-content-center' >
+			<div className={styles.flexCenter}>
+				{isLoading ?
+					<BarLoader 
+						color={"#9ac9f7"}
+						loading={isLoading}
+						width={200}
+						height={8}
+						aria-label="Loading Spinner"
+					/>
+					:
+				isPlaying ?
+					(
+					<>
+						<Card key={quiz?.id} className={styles.cardWrapper}>
+							{/* <Card.Title>zz</Card.Title> */}
+							<div className={styles.pictureWrapper}>
+								<Card.Img variant="top" src={quiz.picture} className={styles.picture}/>
+							</div>
+							<Card.Body>
+								<Form onSubmit={handleSubmit} >
+									<Form.Control 
+										style={{ textAlign: "center" }} 
+										size="lg" 
+										type="text"
+										value={userAnswer} 
+										onChange={handleAnswerChange}
+										/>
+								</Form>
+							</Card.Body>
+						</Card>
+						<Timer/>
+						<p className='mt-2'> 남은문제 : {initQuiz.length} 개</p>
+						{score === null ? "" : (<p>맞춘문제 총 : {score} 개</p>)}
+					</>
+					)
+					:
+					(
+					<>
+						{/* <FontAwesomeIcon icon={faSpinner} spin={true} /> */}
+						<Button 
+							type='button'  
+							variant="outline-light"
+							className={`${styles.startButton}`}
+							onClick={StartGame}>
+								게임 시작
+						</Button>
+					</>
+					)
+				}
+				<p className='mt-2'><b>{result}</b></p>
+			</div>
+			{isGameEnd && 
 				<>
-					{/* <FontAwesomeIcon icon={faSpinner} spin={true} /> */}
-					<Button 
-						type='button'  
-						variant="outline-light"
-						className={`${styles.startButton} my-3`}
-						onClick={StartGame}>
-							게임 시작
-					</Button>
+					{score === null ? "" : (<p>맞춘문제 총 : {score} 개</p>)}
+					<p>소요시간 :  {formatTime(endTime)}</p>
 				</>
-				)
 			}
-			<p style={{marginTop : '30px'}}>{result}</p>
-			{score === null ? "" : (<p>맞춘문제 총 : {score} 개</p>)}
-			<Timer />
-			{/* {isGameEnd && <p>소요시간 :  {formatTime(endTime)}</p>} */}
 		</Container>
 	)
 }

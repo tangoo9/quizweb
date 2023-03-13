@@ -11,7 +11,8 @@ import React, {useState, useCallback} from 'react'
 export const useInput = (initialValue=null) =>{
     const [value, setValue] = useState(initialValue)
     const handler = useCallback((e) =>{
-        setValue(e.target.value);
+        const {target : {value}} = e;
+        setValue(value)
     },[])
     return [value, handler, setValue]
 }

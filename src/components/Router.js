@@ -10,11 +10,15 @@ import TopNavbar from './TopNavbar'
 import AppLayout from '../components/AppLayout'
 
 
-// import QuizTest from '../pages/Quiz copy'
 import ZustandTest from '../pages/ZustandTest'
+import {useUserStore} from '../store'
 
-const AppRouter = ({isLoggedIn ,user}) => (
-	<>
+
+const AppRouter = ({isLoggedIn}) => {
+	const {user, setUser} = useUserStore();
+
+	return (
+		<>
 		<BrowserRouter basename={process.env.PUBLIC_URL}>
 			{/* {isLoggedIn && <TopNavbar isLoggedIn={isLoggedIn} user={user}/>} */}
 			<TopNavbar isLoggedIn={isLoggedIn} user={user} />
@@ -23,13 +27,14 @@ const AppRouter = ({isLoggedIn ,user}) => (
 					<Route path="/" element={<Home isLoggedIn={isLoggedIn} />} />
 					<Route path="/Quiz" element={<Quiz />} />
 					<Route path="/ZustandTest" element={<ZustandTest />} />
-					{/* <Route path="/Ranking" element={<Ranking />} /> */}
-					<Route path="/AddQuiz" element={<AddQuiz user={user} />} />
+					<Route path="/Ranking" element={<Ranking/>} />
+					<Route path="/AddQuiz" element={<AddQuiz/>} />
 					<Route path="/*" element={<Page404 />} />
 				</Routes>
 			</AppLayout>
 		</BrowserRouter>
 	</>
-)
+	)
+}
 
 export default AppRouter

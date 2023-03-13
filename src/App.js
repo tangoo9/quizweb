@@ -3,13 +3,13 @@ import AppRouter from './components/Router';
 import { authService } from './firebaseConfig';
 import React, { useEffect, useState } from 'react'; 
 import { onAuthStateChanged } from 'firebase/auth';
-
+import {useUserStore} from './store'
 
 
 function App() {
 
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	const [user, setUser] = useState(null);
+	const {user, setUser} = useUserStore();
 
 
 	useEffect(()=>{
@@ -29,8 +29,8 @@ function App() {
 	return (
 		<div className="App">
 			{/* <div className="box vibration"></div> */}
-			<AppRouter isLoggedIn={user ? true : false} user={user}/>
-			<footer className="footer">&copy; PictureQuiz {new Date().getFullYear()}<div>최신업데이트 : 03-11 04:39</div></footer> 
+			<AppRouter isLoggedIn={user ? true : false}/>
+			<footer className="footer">&copy; PictureQuiz {new Date().getFullYear()}<div>최신업데이트 : 03-12 11:45 </div></footer> 
 			{/* <Home/> */}
 		</div>
 	);

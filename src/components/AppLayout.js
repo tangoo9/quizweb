@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import styled from 'styled-components'
 
 const MainContent = styled(Col)`
-    margin : 100px auto;
+    margin : 80px auto;
     display: flex;
     justify-content: center;
     align-items: center;

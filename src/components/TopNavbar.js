@@ -1,7 +1,6 @@
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect } from 'react';
-import { Button, Container, Form, Nav, Navbar, NavDropdown, NavItem } from 'react-bootstrap';
+import { Button, Container, Nav, Navbar} from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { authService } from '../firebaseConfig';
 

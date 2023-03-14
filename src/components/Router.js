@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
-import { BrowserRouter, Route, Routes,} from 'react-router-dom'
-import { authService } from '../firebaseConfig'
+import React from 'react'
+import { HashRouter, Route, Routes,} from 'react-router-dom'
 import Page404 from '../pages/404'
 import Home from '../pages/Home'
 import AddQuiz from '../pages/AddQuiz'
@@ -19,7 +18,8 @@ const AppRouter = ({isLoggedIn}) => {
 
 	return (
 		<>
-		<BrowserRouter basename={process.env.PUBLIC_URL}>
+		{/* <BrouserRouter basename={process.env.PUBLIC_URL}/> */}
+		<HashRouter >
 			{/* {isLoggedIn && <TopNavbar isLoggedIn={isLoggedIn} user={user}/>} */}
 			<TopNavbar isLoggedIn={isLoggedIn} user={user} />
 			<AppLayout>
@@ -32,7 +32,7 @@ const AppRouter = ({isLoggedIn}) => {
 					<Route path="/*" element={<Page404 />} />
 				</Routes>
 			</AppLayout>
-		</BrowserRouter>
+		</HashRouter>
 	</>
 	)
 }

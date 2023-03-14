@@ -1,4 +1,4 @@
-import React, { useRef , useCallback} from 'react'
+import React, { useRef , useCallback, useState} from 'react'
 import { dbService, storageService } from '../firebaseConfig'
 import { deleteDoc, doc, updateDoc } from 'firebase/firestore'
 import { deleteObject, getDownloadURL, ref, uploadString } from 'firebase/storage'
@@ -8,8 +8,6 @@ import { AiFillDelete , AiFillEdit} from "react-icons/ai";
 
 import styles from '../css/AddQuiz.module.css'
 import { useInput } from '../hooks/useInput'
-import { useEffect } from 'react'
-import { useState } from 'react'
 import { useUserStore } from '../store'
 
 const EditQuizPost = ({quizPost}) => {

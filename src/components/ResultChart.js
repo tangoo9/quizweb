@@ -1,78 +1,64 @@
-import React from 'react'
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, LinearScale, CategoryScale, BarElement, Title } from 'chart.js';
-import { Bar, Pie } from 'react-chartjs-2';
+import React, { useEffect, useState } from 'react'
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 
-export const options = {
-    indexAxis: 'y',  // horizontal로 막대그래프를 가로로 표시하고 싶을때 설정, 세로로하려면 지우면됨.
-    elements: {
-        bar: {
-        borderWidth: 2,
-        },
-    },
-    responsive: true,
-    plugins: {
-        legend : false,
-        // legend: {
-        //     position: 'right',
-        // },
-        title: {
-        display: true,
-        text: 'Chart.js Horizontal Bar Chart',
-        },
-    },
-    scales: {
-        x: {
-          display: false, // X 축 격자 눈금 숨기기
-        },
-        y: {
-        grid: {
-        // display: false, // Y 축 격자 눈금 숨기기
-        },
-    },
-    },
-};
+import Table from 'react-bootstrap/Table';
+import { dbService } from '../firebaseConfig';
 
-const ResultChart = () => {
+function ResultChart() {
     
-    ChartJS.register(  CategoryScale,
-        LinearScale,
-        BarElement,
-        Title,
-        Tooltip,
-        Legend);
+    const [ranking , setRanking] = useState([])
+    
+	const getRankingData = async () =>{
+		try {
+            const getRankingDocs = await getDocs(query(
+                collection(dbService, 'ranking'), 
+                orderBy('score', 'desc'),
+                orderBy('time', 'desc')
+            ));
+			const rankingArray = getRankingDocs.docs.map((doc) => doc.data())
+			console.log("랭킹 로드 완료" , rankingArray)
+            setRanking(rankingArray)
+		}catch (error) {
+			console.log('에러', error);
+		}
+	};
 
-    const data = {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [
-            {
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)',
-            ],
-            borderWidth: 1,
-            },
-        ],
-    };
-        
-  return (
-    <>
-        <Bar data={data} options={options}/>
-    </>
-  )
+    useEffect(()=>{
+        getRankingData();
+    },[])
+
+
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60000).toString().padStart(2, '0');
+        const seconds = Math.floor((time % 60000) / 1000).toString().padStart(2, '0');
+        const milliseconds = (time % 1000).toString().slice(0, 2).padStart(2, '0');
+        return `${minutes}:${seconds}:${milliseconds}`;
+    }
+
+    return (
+        <>
+            <Table striped bordered hover size="sm">
+                <thead>
+                    <tr>
+                    <th>#</th>
+                    <th>닉네임</th>
+                    <th>점수</th>
+                    <th>소요 시간</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {ranking.map((ranking, idx) => (
+                        <tr key={ranking.createdAt}>
+                            <td>{idx + 1}</td>
+                            <td>{ranking.userNickname}</td>
+                            <td>{ranking.score}</td>
+                            <td>{formatTime(ranking.time)}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
+        </>
+    );
 }
 
 export default ResultChart

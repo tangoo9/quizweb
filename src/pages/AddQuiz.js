@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import { addDoc, collection, serverTimestamp  } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { v4 } from 'uuid';

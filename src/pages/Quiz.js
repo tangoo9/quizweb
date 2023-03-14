@@ -1,16 +1,13 @@
-import { collection, getDocs} from 'firebase/firestore'
+import { addDoc, collection, getDocs, serverTimestamp} from 'firebase/firestore'
 import React, { useCallback, useEffect, useState } from 'react'
-import { Button, Card, Col, Container, Form } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { Button, Card, Container, Form } from 'react-bootstrap';
 
-import { authService, dbService } from '../firebaseConfig'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FadeLoader } from 'react-spinners';
+import {  dbService } from '../firebaseConfig'
 
 import styles from "../css/Quiz.module.css";
 import Timer from '../components/Timer';
-import { useQuizStore } from '../store';
+import { useQuizStore, useUserStore } from '../store';
 import BarLoader from 'react-spinners/BarLoader';
 
 const correctSound = new Audio(`${process.env.PUBLIC_URL}/sounds/correct.mp3`);
@@ -28,13 +25,15 @@ const Quiz = () => {
 	// const [endTime, setEndTime] = useState("")
 	
 	
-
+	
+	const {user} = useUserStore();
 	const {
 		isPlaying , setIsPlaying,
 		result, setResult,
 		endTime, setEndTime,
 		isGameEnd, setIsGameEnd,
 	} = useQuizStore();
+
 
 
 	const getAllQuiz = async () =>{
@@ -108,6 +107,7 @@ const Quiz = () => {
 	}
 
 	useEffect(() => {
+		console.log(user)
 		if (initQuiz.length){
 			nextQuiz();
 		}else {
@@ -121,8 +121,27 @@ const Quiz = () => {
 		if(isGameEnd){
 			console.log("게임 종료시간입니다.", endTime)
 			console.log("게임 종료", isGameEnd)
+			sendRanking()
 		}
 	}, [endTime]);
+
+
+	const sendRanking = async() =>{
+		if(user){
+			const rankingData = {
+				userNickname : user.displayName, 
+				createdAt : serverTimestamp(), 
+				score : score, 
+				time : endTime
+			}
+			try{
+				await addDoc(collection(dbService,"ranking"), rankingData);
+			}catch(error){
+				console.log(error)
+			}
+		}
+	}	
+
 
 	// 임시
 	const formatTime = (time) => {

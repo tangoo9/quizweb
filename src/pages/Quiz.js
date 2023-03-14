@@ -24,8 +24,6 @@ const Quiz = () => {
 	// const [isGameEnd, setIsGameEnd] = useState(false);
 	// const [endTime, setEndTime] = useState("")
 	
-	
-	
 	const {user} = useUserStore();
 	const {
 		isPlaying , setIsPlaying,
@@ -107,7 +105,6 @@ const Quiz = () => {
 	}
 
 	useEffect(() => {
-		console.log(user)
 		if (initQuiz.length){
 			nextQuiz();
 		}else {
@@ -116,11 +113,9 @@ const Quiz = () => {
 		}
 	}, [initQuiz, nextQuiz]);
 
-	// 게임이 종료되면 종료시간과 랭킹점수를 업로드 예정
+	// 게임이 종료되면 종료시간과 랭킹점수를 업로드 예정s
 	useEffect(() => {
-		if(isGameEnd){
-			console.log("게임 종료시간입니다.", endTime)
-			console.log("게임 종료", isGameEnd)
+		if(isGameEnd && score !== null){
 			sendRanking()
 		}
 	}, [endTime]);

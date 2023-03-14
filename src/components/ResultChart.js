@@ -13,7 +13,7 @@ function ResultChart() {
             const getRankingDocs = await getDocs(query(
                 collection(dbService, 'ranking'), 
                 orderBy('score', 'desc'),
-                orderBy('time', 'desc')
+                orderBy('time', 'asc')
             ));
 			const rankingArray = getRankingDocs.docs.map((doc) => doc.data())
 			console.log("랭킹 로드 완료" , rankingArray)

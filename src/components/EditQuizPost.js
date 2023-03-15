@@ -52,7 +52,6 @@ const EditQuizPost = ({quizPost}) => {
                     await updateDoc(postDocRef,{answer :input})
                 }
                 alert("수정 완료!")
-                await updateDoc(postDocRef,{answer :input})
             }catch(error){
                 console.log(error)
             }
@@ -108,7 +107,7 @@ const EditQuizPost = ({quizPost}) => {
                             <FormControl className="text-center" value={input} onChange={handleInput}/>
                         </Card.Title>
                         <Card.Text className='my-0 d-flex justify-content-center'>
-                            <Button className="mx-3 my-3" type="submit" variant="success" onClick={handleEditSubmit}>
+                            <Button className="mx-3 my-3" style={{color:'black', borderColor:'#aaa'}} type="submit" variant="outline-light" onClick={handleEditSubmit}>
                                 <span>수정</span>
                                 {' '}
                                 <AiFillEdit icons='true'/>

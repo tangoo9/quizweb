@@ -1,19 +1,14 @@
 export default function Page404(){
     return (
         <>
-            <div className="flex items-center justify-center min-h-auto bg-white my-10 py-1">
-                <div className="flex flex-col">
-                    <div className="flex flex-col items-center">
-                        <div className="text-indigo-500 font-bold text-7xl">
-                            404
-                        </div>
-                        <div className="font-bold text-3xl xl:text-7xl lg:text-6xl md:text-5xl mt-10">
-                            This page does not exist
-                        </div>
-                        <div className="text-gray-400 font-medium text-sm md:text-xl lg:text-2xl mt-8">
-                            The page you are looking for could not be found.
-                        </div>
-                    </div>
+            <div class="d-flex align-items-center justify-content-center">
+                <div class="text-center">
+                    <h1 class="display-1 fw-bold">404</h1>
+                    <p class="fs-3"> Page not found.</p>
+                    <p class="lead">
+                        The page you’re looking for doesn’t exist.
+                    </p>
+                    <a href="/" class="btn btn-primary">Go Home</a>
                 </div>
             </div>
         </>

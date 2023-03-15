@@ -13,6 +13,7 @@
     position: relative;
     width: 100%;
     height: 400px;
+    cursor: pointer;
 }
 
 .attachmentWrapper img{
@@ -31,4 +32,11 @@
 
 .sumitBtnWrapper button{
     width: 10rem;
+}
+
+@media (max-width :768px) {
+    .attachmentWrapper{
+        height: 220px;
+    }
+    
 }

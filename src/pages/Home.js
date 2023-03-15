@@ -15,7 +15,7 @@ const Home = ({isLoggedIn}) => {
             <MDBContainer className="my-3 gradient-form">
                 <MDBRow>
                     <MDBCol col='6' className="mb-5">
-                        <div className="mainInfo d-flex flex-column  justify-content-center h-100 mb-4">
+                        <div className={`${isLoggedIn ? "mainInfo_450px" : "mainInfo"} d-flex flex-column justify-content-center mb-3`}>
                             <div className="text-white px-1 py-2 p-md-2 mx-md-4">
                             <h4 className="text-white mb-5" style={{whiteSpace: 'nowrap'}}>
                                     <span className="d-block d-md-inline-block">

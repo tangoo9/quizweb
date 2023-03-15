@@ -113,7 +113,7 @@ const Quiz = () => {
 		}
 	}, [initQuiz, nextQuiz]);
 
-	// 게임이 종료되면 종료시간과 랭킹점수를 업로드 예정s
+	// 게임이 종료되면 종료시간과 랭킹점수를 업로드
 	useEffect(() => {
 		if(isGameEnd && score !== null){
 			sendRanking()

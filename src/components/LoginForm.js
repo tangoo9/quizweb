@@ -10,7 +10,6 @@ import {
     updateProfile 
 } from 'firebase/auth';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
 import { authService, dbService } from '../firebaseConfig';
 
@@ -27,7 +26,7 @@ import {
 from 'mdb-react-ui-kit';
 import { faFacebook, faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { addDoc, collection, doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 
 import { useInput } from '../hooks/useInput';
 
@@ -80,6 +79,16 @@ function LoginForm() {
         }
     }
 
+    // 구글 auth 에러코드
+    const errorCode = {
+        "auth/user-not-found" : "이메일 혹은 비밀번호가 일치하지 않습니다.",
+        "auth/email-already-in-use" : "이미 사용 중인 이메일입니다.",
+        "auth/weak-password" : "비밀번호는 6글자 이상이어야 합니다.",
+        "auth/network-request-failed" : "네트워크 연결에 실패 하였습니다.",
+        "auth/invalid-email" : "잘못된 이메일 형식입니다.",
+        "auth/internal-error" : "잘못된 요청입니다."
+    }
+
 
     const onSignUpSubmit = async(e) =>{
         e.preventDefault();
@@ -89,8 +98,7 @@ function LoginForm() {
             alert(`회원가입을 축하합니다! ${userNickname}님!`)
         }catch(err){
             console.log(err);
-            alert(err.message)
-            setError(err.message)
+            setError(errorCode[err.code])
         }
     }
 
@@ -100,8 +108,7 @@ function LoginForm() {
             await signInWithEmailAndPassword(authService, email, password);
         }catch(err){
             console.log(err);
-            alert(err.message)
-            setError(err.message)
+            setError(errorCode[err.code])
         }
     }
 
@@ -126,9 +133,17 @@ function LoginForm() {
                             <form onSubmit={onLoginSubmit}>
                                 <div className='d-flex flex-column' style={{width: '100%'}}>
                                     <MDBInput 
-                                        wrapperClass='mb-3 d-flex flex-column-reverse' label='Email' labelClass='me-2 d-inline' onChange={onChangeEmail} type='email'/>
+                                        wrapperClass='mb-3 d-flex flex-column-reverse' 
+                                        label='Email' labelClass='me-2 d-inline' 
+                                        onChange={onChangeEmail}
+                                        autoComplete ="username" 
+                                        type='email'/>
                                     <MDBInput 
-                                        wrapperClass='mb-3 d-flex flex-column-reverse' label='Password' onChange={onChangePassword} type='password'/>
+                                        wrapperClass='mb-3 d-flex flex-column-reverse' 
+                                        label='Password' 
+                                        onChange={onChangePassword} 
+                                        autoComplete ="current-password"
+                                        type='password'/>
                                     <Button  type="submit" className="mb-4 w-100 gradient-custom-2">로그인</Button>
                                     {error && <span style={{color:'red'}}>{error}</span>}
                                 </div>
@@ -162,13 +177,24 @@ function LoginForm() {
                     </MDBTabsPane>
                     <MDBTabsPane show={justifyActive === 'tab2'}>
                         <form onSubmit={onSignUpSubmit}>
-                            <MDBInput wrapperClass='mb-4 d-flex flex-column-reverse' label='이름(닉네임)' onChange={onChangeUserNickname} type='text'/>
-                            <MDBInput wrapperClass='mb-4 d-flex flex-column-reverse' label='Email' onChange={onChangeEmail} type='email'/>
-                            <MDBInput wrapperClass='mb-4 d-flex flex-column-reverse' label='비밀번호' onChange={onChangePassword} type='password'/>
+                            <MDBInput wrapperClass='mb-4 d-flex flex-column-reverse' 
+                                label='이름(닉네임)' 
+                                onChange={onChangeUserNickname} 
+                                type='text'/>
+                            <MDBInput wrapperClass='mb-4 d-flex flex-column-reverse' 
+                                label='Email' 
+                                onChange={onChangeEmail} 
+                                autoComplete ="username"
+                                type='email'/>
+                            <MDBInput wrapperClass='mb-4 d-flex flex-column-reverse' 
+                                label='비밀번호' 
+                                onChange={onChangePassword} 
+                                autoComplete ="new-password"
+                                type='password'/>
                             <div className='d-flex justify-content-center mb-4'>
                                 <MDBCheckbox name='flexCheck' id='flexCheckDefault' label='회원가입에 동의합니다.' />
                             </div>
-                                {error && <span style={{color:'red'}}>{error}</span>}
+                                {error && <span style={{color:'red', display:'inline-block'}} className="mb-3">{error}</span>}
                             <Button type="submit" className="mb-4 w-100 gradient-custom-2">회원가입</Button>
                         </form>
                     </MDBTabsPane>

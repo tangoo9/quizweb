@@ -1,5 +1,5 @@
 import React from 'react'
-import { collection, onSnapshot, orderBy, query, getDocs, deleteDoc, doc, getFirestore } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query, getDocs, deleteDoc, doc, getFirestore, limit } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { dbService } from "../firebaseConfig";
 import { useUserStore } from '../store';
@@ -14,7 +14,7 @@ const QuizPosts = () => {
 	useEffect(()=>{
 		const q = query(
 			collection(dbService, "picturedb"),
-			orderBy("createdAt", "desc")
+			orderBy("createdAt", "desc"),
 			)
 			onSnapshot(q, (snapshot) => {
 			const quizPostArray = snapshot.docs.map((doc) => ({

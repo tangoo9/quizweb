@@ -1,4 +1,5 @@
 import {create} from 'zustand'
+import { authService } from '../firebaseConfig';
 
 
 // 전역으로 써야할 state가 무엇인가..
@@ -7,7 +8,7 @@ import {create} from 'zustand'
 export const useQuizStore  = create((set)=>({
     isPlaying : false,
     result : null,
-    isGameEnd : false,
+    isGameEnd : null,
     endTime : "",
     setIsPlaying : (newValue)=> set({isPlaying : newValue}),
     setResult : (newValue)=> set({result : newValue}),

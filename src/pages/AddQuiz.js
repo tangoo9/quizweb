@@ -127,7 +127,6 @@ const AddQuiz = () => {
 						</>
 					)}
 					<Card.Body>
-						{/* <Card.Title>Card Title</Card.Title> */}
 						<Form.Control 
 							style={{textAlign:'center'}}
 							type="text" 
@@ -176,9 +175,6 @@ const AddQuiz = () => {
 				</Card>
 			</form>
 			<QuizPosts/>
-			{/* <p>닉네임 : {user?.displayName}</p>
-			<p>이메일 : {user?.email}</p>
-			<p>연락처 : {user?.phoneNumber}</p> */}
         </div>
     )
 }

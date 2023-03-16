@@ -9,24 +9,18 @@ import TopNavbar from './TopNavbar'
 import AppLayout from '../components/AppLayout'
 
 
-import ZustandTest from '../pages/ZustandTest'
-import {useUserStore} from '../store'
-
 
 const AppRouter = ({isLoggedIn}) => {
-	const {user, setUser} = useUserStore();
 
 	return (
 		<>
 		{/* <BrouserRouter basename={process.env.PUBLIC_URL}/> */}
 		<HashRouter >
-			{/* {isLoggedIn && <TopNavbar isLoggedIn={isLoggedIn} user={user}/>} */}
-			<TopNavbar isLoggedIn={isLoggedIn} user={user} />
+			<TopNavbar isLoggedIn={isLoggedIn} />
 			<AppLayout>
 				<Routes>
 					<Route path="/" element={<Home isLoggedIn={isLoggedIn} />} />
 					<Route path="/Quiz" element={<Quiz />} />
-					<Route path="/ZustandTest" element={<ZustandTest />} />
 					<Route path="/Ranking" element={<Ranking/>} />
 					<Route path="/AddQuiz" element={<AddQuiz/>} />
 					<Route path="/*" element={<Page404 />} />

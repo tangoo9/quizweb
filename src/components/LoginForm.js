@@ -38,6 +38,8 @@ function LoginForm() {
     const [email , onChangeEmail] = useInput('')
     const [password , onChangePassword] = useInput('')
     const [userNickname , onChangeUserNickname] = useInput('')
+    const [termCheck, setTermCheck] = useState("");
+    const [termError, setTermError] = useState(false);
 
     // 로그인, 회원가입 form
     const [justifyActive, setJustifyActive] = useState('tab1');
@@ -86,12 +88,18 @@ function LoginForm() {
         "auth/weak-password" : "비밀번호는 6글자 이상이어야 합니다.",
         "auth/network-request-failed" : "네트워크 연결에 실패 하였습니다.",
         "auth/invalid-email" : "잘못된 이메일 형식입니다.",
-        "auth/internal-error" : "잘못된 요청입니다."
+        "auth/internal-error" : "잘못된 요청입니다.",
+        "signup/term-error" : "약관에 동의해주세요."
     }
 
 
     const onSignUpSubmit = async(e) =>{
         e.preventDefault();
+        if(!termCheck){
+            setTermError(true);
+            setError(errorCode["signup/term-error"])
+            return 
+        }
         try{
             await createUserWithEmailAndPassword(authService, email, password);
             await updateProfile(authService.currentUser, {displayName : userNickname})
@@ -100,6 +108,7 @@ function LoginForm() {
             console.log(err);
             setError(errorCode[err.code])
         }
+
     }
 
     const onLoginSubmit = async(e) =>{
@@ -110,6 +119,12 @@ function LoginForm() {
             console.log(err);
             setError(errorCode[err.code])
         }
+    }
+
+    const onChangeTerm = (e) =>{
+        setTermCheck(e.target.checked)
+		setTermError(false);
+        console.log(termCheck)
     }
 
     return (
@@ -192,7 +207,12 @@ function LoginForm() {
                                 autoComplete ="new-password"
                                 type='password'/>
                             <div className='d-flex justify-content-center mb-4'>
-                                <MDBCheckbox name='flexCheck' id='flexCheckDefault' label='회원가입에 동의합니다.' />
+                                <MDBCheckbox 
+                                name='flexCheck' 
+                                id='flexCheckDefault' 
+                                checked={termCheck} 
+                                onChange={onChangeTerm}
+                                label='회원가입에 동의합니다.' />
                             </div>
                                 {error && <span style={{color:'red', display:'inline-block'}} className="mb-3">{error}</span>}
                             <Button type="submit" className="mb-4 w-100 gradient-custom-2">회원가입</Button>

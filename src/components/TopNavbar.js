@@ -1,13 +1,16 @@
+import React,{ useEffect } from 'react';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Container, Nav, Navbar} from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { authService } from '../firebaseConfig';
+import { useUserStore } from '../store';
 
 
 
-const TopNavbar= ({isLoggedIn, user}) => {
-    // <Link to="/Quiz">quiz</Link>
+const TopNavbar= ({isLoggedIn}) => {
+    const {user, setUser} = useUserStore();
+
     const navigate = useNavigate()
     const onLogOut = ()=>{  
         authService.signOut();
@@ -15,6 +18,7 @@ const TopNavbar= ({isLoggedIn, user}) => {
     }
 
     const location = useLocation();
+
 
 
     return (
@@ -33,7 +37,7 @@ const TopNavbar= ({isLoggedIn, user}) => {
                 <Nav.Link 
                     className={`${location.pathname ==='/AddQuiz' ? 'active' : ''} me-3 me-sm-5`} as={Link} to="/AddQuiz">AddQuiz</Nav.Link>
                 <Nav.Item className="ms-auto">
-                    <span className='welcome-text me-3 me-sm-5'>{user.displayName}님 좋은 하루 되세요!</span>
+                    <span className='welcome-text me-3 me-sm-5'>{user?.displayName ?? "회원"}님 좋은 하루 되세요!</span>
                 </Nav.Item>
                 <Button type="button" className='gradient-custom-2' onClick={onLogOut}>
                     <span className='log-out-Btn'>Log Out</span>

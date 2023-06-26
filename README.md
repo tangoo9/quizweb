@@ -3,7 +3,7 @@
 
 ### 랜덤한 사진속 인물이나 캐릭터 퀴즈를 맞추는 웹페이지입니다.
 
-### Deploy : [https://silku.github.io/quizweb](https://silku.github.io/quizweb)  
+### Deploy : [https://silku.github.io/tangoo9](https://silku.github.io/tangoo9)  
 
 <br>
 
